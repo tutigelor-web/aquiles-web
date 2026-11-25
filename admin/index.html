@@ -1,13 +1,482 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex">
-  <title>Panel · Aquiles</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Panel · Aquiles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Panel de administración de la galería de Aquiles.
+   Lee y guarda data/obras.json en GitHub (tutigelor-web/aquiles-web) con el login de GitHub que da Netlify. */
+:root{--ink:#141414;--soft:#77736d;--line:#e6e4e0;--wall:#f4f3f1;--red:#f0401b;--bg:#fff;color-scheme:light}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Figtree,system-ui,sans-serif}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+img{display:block;max-width:100%}
+h1,h2,h3{font-family:"Big Shoulders Display",Impact,sans-serif;font-weight:800;text-transform:uppercase;line-height:1;margin:0;letter-spacing:.01em}
+:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.hidden{display:none!important}
+
+/* login */
+#login{min-height:100vh;display:grid;place-items:center;padding:24px;text-align:center}
+#login img{width:150px;margin:0 auto 18px}
+#login p{color:var(--soft);margin:0 0 26px}
+.btn{border:1px solid var(--ink);background:var(--ink);color:#fff;border-radius:99px;padding:11px 20px;font-weight:600;min-height:44px;display:inline-flex;align-items:center;gap:8px;text-decoration:none;white-space:nowrap}
+.btn:hover{background:var(--red);border-color:var(--red)}
+.btn.ghost{background:#fff;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--red);color:var(--red);background:#fff}
+.btn.red{background:var(--red);border-color:var(--red)}
+.btn.red:hover{background:#d4330f;border-color:#d4330f}
+.btn:disabled{opacity:.35;cursor:default;background:var(--ink);border-color:var(--ink)}
+.btn.sm{padding:7px 14px;min-height:36px;font-size:14px}
+.err{color:#b3261e;font-size:14px;margin-top:14px}
+
+/* barra superior */
+.top{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .in{max-width:1320px;margin:0 auto;padding:12px max(3vw,16px);display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.top .logo{height:26px;width:auto}
+.top .tag{font-size:13px;color:var(--soft);border-left:1px solid var(--line);padding-left:14px}
+.top .sp{flex:1}
+.who{font-size:13px;color:var(--soft)}
+.who button{border:0;background:none;color:var(--soft);text-decoration:underline;padding:0 0 0 6px}
+.dirty{font-size:13px;color:var(--red);font-weight:600}
+
+/* cabecera de sección */
+main{max-width:1320px;margin:0 auto;padding:24px max(3vw,16px) 80px}
+.head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.tabs{display:flex;gap:26px;flex-wrap:wrap}
+.tabs button{border:0;background:none;padding:0;text-align:left;color:#c9c5bf;transition:color .2s}
+.tabs button:hover{color:var(--red)}
+.tabs button[aria-selected=true]{color:var(--ink)}
+.tabs h1{font-size:clamp(34px,5vw,52px)}
+.tabs small{display:block;font-size:13px;color:var(--soft);font-weight:500;margin-top:4px;font-family:Figtree,sans-serif;text-transform:none;letter-spacing:0}
+.acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.search{border:1px solid var(--line);border-radius:99px;padding:9px 16px;min-height:40px;width:200px;font-size:14px;background:#fff}
+.note{font-size:13px;color:var(--soft);margin:-6px 0 16px}
+
+/* grilla */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px}
+.grp{border:1px solid var(--line);border-radius:6px;background:#fff;display:flex;flex-direction:column;transition:box-shadow .2s,border-color .2s,opacity .2s}
+.grp.pair{grid-column:span 2}
+.grp:hover{border-color:#cfccc6}
+.grp.drag{opacity:.4}
+.grp.over{box-shadow:inset 0 0 0 2px var(--red);border-color:var(--red)}
+.grp .bar{display:flex;align-items:center;gap:8px;padding:8px 10px 0;font-size:12px;color:var(--soft)}
+.grp .bar .n{font-variant-numeric:tabular-nums}
+.grp .bar .handle{margin-left:auto;cursor:grab;padding:4px 6px;border-radius:4px;user-select:none;font-size:15px;line-height:1;color:#aaa6a0}
+.grp .bar .handle:hover{color:var(--ink);background:var(--wall)}
+.pairtag{background:#fdeae5;color:#b02a0c;border-radius:99px;padding:1px 8px;font-weight:600}
+.cards{display:grid;grid-template-columns:repeat(var(--c,1),minmax(0,1fr));gap:10px;padding:10px;flex:1}
+.card{border:0;background:none;padding:0;text-align:left;display:flex;flex-direction:column;gap:8px}
+.card .ph{aspect-ratio:4/5;background:var(--wall);border-radius:3px;display:flex;align-items:center;justify-content:center;padding:14px;overflow:hidden;position:relative}
+.card .ph img{max-height:100%;max-width:100%;width:auto;height:auto;object-fit:contain;box-shadow:0 4px 10px -4px rgba(0,0,0,.35)}
+.card .ph .empty{font-size:13px;color:#b3261e;text-align:center}
+.card:hover .ph{background:#eeece8}
+.card .t{font-weight:600;line-height:1.2}
+.card .m{font-size:13px;color:var(--soft)}
+.card .p{font-size:14px;font-weight:600}
+.card .badge{position:absolute;top:8px;left:8px;background:var(--red);color:#fff;font-size:11px;font-weight:700;border-radius:99px;padding:2px 8px}
+.empty-state{border:1px dashed var(--line);border-radius:6px;padding:40px;text-align:center;color:var(--soft)}
+
+/* ficha de edición */
+.scrim{position:fixed;inset:0;background:rgba(20,20,20,.25);z-index:20;opacity:0;pointer-events:none;transition:opacity .3s}
+.scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(480px,100%);background:#fff;z-index:21;transform:translateX(105%);transition:transform .35s cubic-bezier(.2,.7,.2,1);display:flex;flex-direction:column;box-shadow:-20px 0 40px rgba(0,0,0,.08)}
+.drawer.on{transform:none}
+.drawer .dh{display:flex;align-items:center;gap:10px;padding:16px 22px;border-bottom:1px solid var(--line)}
+.drawer .dh h2{font-size:28px;flex:1}
+.x{border:0;background:none;font-size:26px;width:40px;height:40px;line-height:1;color:var(--ink)}
+.drawer .db{flex:1;overflow:auto;padding:20px 22px 30px;display:flex;flex-direction:column;gap:16px}
+.drawer .df{border-top:1px solid var(--line);padding:14px 22px;display:flex;gap:8px;flex-wrap:wrap}
+.f label,.f .lb{display:block;font-size:13px;font-weight:600;margin-bottom:6px}
+.f .hint{font-size:12px;color:var(--soft);margin-top:5px}
+.in{width:100%;border:1px solid var(--line);border-radius:6px;padding:10px 12px;font-size:16px;background:#fff;min-height:44px}
+.in:focus{border-color:var(--ink);outline:none}
+.row2{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}
+.row2 span{color:var(--soft)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.drop{border:1.5px dashed #cfccc6;border-radius:6px;background:var(--wall);min-height:190px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;padding:16px;text-align:center;cursor:pointer;position:relative;transition:border-color .2s,background .2s}
+.drop:hover,.drop.over{border-color:var(--red);background:#fbf3f0}
+.drop img{max-height:230px;width:auto;box-shadow:0 6px 14px -6px rgba(0,0,0,.35)}
+.drop small{color:var(--soft);font-size:13px}
+.drop input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.chk{display:flex;gap:10px;align-items:flex-start;font-size:14px;cursor:pointer}
+.chk input{width:18px;height:18px;margin-top:2px;accent-color:var(--red)}
+.seg{display:flex;border:1px solid var(--line);border-radius:99px;padding:3px;gap:3px}
+.seg button{flex:1;border:0;background:none;border-radius:99px;padding:8px 10px;font-size:14px;font-weight:600;color:var(--soft);min-height:38px}
+.seg button[aria-pressed=true]{background:var(--ink);color:#fff}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:grid;grid-template-columns:1fr 96px 110px 36px;gap:6px;align-items:center}
+.opt .in{font-size:14px;padding:8px 10px;min-height:40px}
+.opt .del{border:0;background:none;color:var(--soft);font-size:18px;height:36px}
+.opt .del:hover{color:#b3261e}
+.optsh{display:grid;grid-template-columns:1fr 96px 110px 36px;gap:6px;font-size:11px;color:var(--soft)}
+.link{border:0;background:none;padding:0;color:var(--ink);text-decoration:underline;font-size:14px;font-weight:600;align-self:flex-start}
+.link.danger{color:#b3261e}
+.move{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--soft)}
+
+/* avisos y diálogos */
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:#fff;padding:11px 18px;border-radius:99px;font-size:14px;z-index:40;transition:.3s;pointer-events:none;max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.modal{position:fixed;inset:0;z-index:30;background:rgba(20,20,20,.35);display:grid;place-items:center;padding:20px}
+.modal .box{background:#fff;border-radius:8px;padding:24px;width:min(420px,100%);display:flex;flex-direction:column;gap:14px}
+.modal h3{font-size:28px}
+.modal p{margin:0;color:var(--soft)}
+.modal .bb{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.prog{height:4px;background:var(--wall);border-radius:9px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--red);width:0;transition:width .3s}
+
+@media(max-width:640px){
+  .top .tag{display:none}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .grp.pair{grid-column:span 2}
+  .search{width:100%}
+  .tabs{gap:18px}
+  .tabs h1{font-size:30px}
+  .acts{width:100%}
+  .opt,.optsh{grid-template-columns:1fr 80px 90px 30px}
+}
+</style>
 </head>
 <body>
-  <!-- Panel de administración de la galería (Decap CMS). La configuración está en config.yml -->
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+<section id="login" class="hidden">
+  <div>
+    <img src="/img/logo-s.png" alt="Aquiles">
+    <h1 style="font-size:40px;margin-bottom:8px">Panel</h1>
+    <p>Cargá, editá y ordená las obras de la galería.</p>
+    <button class="btn" id="loginBtn">Entrar con GitHub</button>
+    <div class="err" id="loginErr"></div>
+  </div>
+</section>
+
+<div id="app" class="hidden">
+  <header class="top"><div class="in">
+    <img class="logo" src="/img/logo-s.png" alt="Aquiles">
+    <span class="tag">Panel de obras</span>
+    <span class="sp"></span>
+    <span class="dirty hidden" id="dirty">Cambios sin publicar</span>
+    <a class="btn ghost sm" href="/" target="_blank" rel="noopener">Ver web ↗</a>
+    <button class="btn red sm" id="publish" disabled>Publicar cambios</button>
+    <span class="who" id="who"></span>
+  </div></header>
+
+  <main>
+    <div class="head">
+      <div class="tabs" role="tablist">
+        <button role="tab" data-tab="o" aria-selected="true"><h1>Originales</h1><small id="sumO"></small></button>
+        <button role="tab" data-tab="p" aria-selected="false"><h1>Prints</h1><small id="sumP"></small></button>
+      </div>
+      <div class="acts">
+        <input class="search" id="q" type="search" placeholder="Buscar por título" aria-label="Buscar por título">
+        <span id="addBtns"></span>
+      </div>
+    </div>
+    <p class="note" id="note"></p>
+    <div class="grid" id="grid"></div>
+  </main>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Editar obra">
+  <div class="dh"><h2 id="dTitle">Editar</h2><button class="x" data-close aria-label="Cerrar">×</button></div>
+  <div class="db" id="dBody"></div>
+  <div class="df" id="dFoot"></div>
+</aside>
+<div class="toast" id="toast" role="status"></div>
+<div id="modalRoot"></div>
+
+<script>
+{
+// ---------- configuración ----------
+const REPO = 'tutigelor-web/aquiles-web', BRANCH = 'main', DATA = 'data/obras.json', UPLOADS = 'img/obras';
+const DEMO = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) && location.search.includes('demo');
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const usd = v => 'USD ' + (+v||0).toLocaleString('es-AR');
+const toast = m => { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('on'), 2600); };
+
+// ---------- estado ----------
+let token = '', user = '', data = {originales:[], prints:[]}, sha = '', tab = 'o', dirty = false;
+const blobs = {};     // foto nueva (todavía no subida) -> {file, url}
+const keyOf = new WeakMap(); let kc = 0; const key = o => { if(!keyOf.has(o)) keyOf.set(o, 'k'+(++kc)); return keyOf.get(o); };
+const imgSrc = p => !p ? '' : (blobs[p] ? blobs[p].url : (p.startsWith('/') ? p : '/'+p));
+const setDirty = v => { dirty = v; $('#dirty').classList.toggle('hidden', !v); $('#publish').disabled = !v; };
+addEventListener('beforeunload', e => { if(dirty){ e.preventDefault(); e.returnValue = ''; } });
+
+// ---------- login con GitHub (a través de Netlify) ----------
+const saveToken = t => { try{ localStorage.setItem('aq-admin-token', t); }catch(e){} };
+const readToken = () => { try{ return localStorage.getItem('aq-admin-token') || (JSON.parse(localStorage.getItem('decap-cms-user')||'{}').token) || ''; }catch(e){ return ''; } };
+const login = () => new Promise((ok, ko) => {
+  const w = 600, h = 680, l = screenX + (outerWidth-w)/2, t = screenY + (outerHeight-h)/2;
+  const url = `https://api.netlify.com/auth?provider=github&site_id=${encodeURIComponent(location.hostname)}&scope=repo`;
+  const pop = window.open(url, 'aq-login', `width=${w},height=${h},left=${l},top=${t}`);
+  if(!pop){ ko(new Error('El navegador bloqueó la ventana de login. Permití ventanas emergentes para este sitio.')); return; }
+  const onMsg = e => {
+    if(e.origin !== 'https://api.netlify.com' || typeof e.data !== 'string') return;
+    if(e.data === 'authorizing:github'){ pop.postMessage(e.data, e.origin); return; }
+    const m = e.data.match(/^authorization:github:(success|error):(.*)$/s);
+    if(!m) return;
+    removeEventListener('message', onMsg);
+    try{ const j = JSON.parse(m[2]); if(m[1]==='success' && j.token) ok(j.token); else ko(new Error(j.message || 'No se pudo entrar.')); }
+    catch(err){ ko(err); }
+  };
+  addEventListener('message', onMsg);
+});
+
+// ---------- GitHub ----------
+const gh = async (path, opts={}) => {
+  const r = await fetch('https://api.github.com' + path, {...opts, headers:{'Accept':'application/vnd.github+json','Authorization':'Bearer '+token, ...(opts.body?{'Content-Type':'application/json'}:{})}});
+  if(!r.ok){ const e = new Error((await r.json().catch(()=>({}))).message || ('Error '+r.status)); e.status = r.status; throw e; }
+  return r.status === 204 ? null : r.json();
+};
+const b64ToText = b => new TextDecoder().decode(Uint8Array.from(atob(b.replace(/\n/g,'')), c => c.charCodeAt(0)));
+const bytesToB64 = bytes => { let s = ''; for(let i=0; i<bytes.length; i+=0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i, i+0x8000)); return btoa(s); };
+const textToB64 = t => bytesToB64(new TextEncoder().encode(t));
+
+const loadData = async () => {
+  if(DEMO){ data = await (await fetch('/data/obras.json', {cache:'no-cache'})).json(); sha = 'demo'; return; }
+  const f = await gh(`/repos/${REPO}/contents/${DATA}?ref=${BRANCH}&t=${Date.now()}`);
+  sha = f.sha; data = JSON.parse(b64ToText(f.content));
+  data.originales ||= []; data.prints ||= [];
+};
+
+// reduce la foto antes de subirla (máx. 1800 px, JPG), así la web sigue cargando rápido
+const shrink = file => new Promise((ok, ko) => {
+  const im = new Image(), u = URL.createObjectURL(file);
+  im.onload = () => { const M = 1800, s = Math.min(1, M/Math.max(im.naturalWidth, im.naturalHeight));
+    const c = document.createElement('canvas'); c.width = Math.round(im.naturalWidth*s); c.height = Math.round(im.naturalHeight*s);
+    const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0,0,c.width,c.height); x.drawImage(im, 0, 0, c.width, c.height);
+    c.toBlob(b => { URL.revokeObjectURL(u); b ? ok(b) : ko(new Error('No se pudo leer la foto')); }, 'image/jpeg', .86); };
+  im.onerror = () => { URL.revokeObjectURL(u); ko(new Error('Ese archivo no es una imagen válida')); };
+  im.src = u;
+});
+const slug = s => String(s||'obra').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40) || 'obra';
+
+// ---------- vista principal ----------
+const sizeKey = x => { const [a,b] = String(x.medida||'50×50').split(/[×x]/i).map(Number); return Math.max(a||50,b||50)*1000 + (a||50)*(b||50)/100; };
+const groupsO = () => { const g = [], og = data.originales; for(let i=0; i<og.length; i++){ const it = [i]; while(og[i].par_con_siguiente && i+1 < og.length){ i++; it.push(i); } g.push(it); } return g; };
+const priceRange = arr => { const v = arr.filter(x=>x>0); return v.length ? `${usd(Math.min(...v))} a ${usd(Math.max(...v)).replace('USD ','')}` : 'sin precios'; };
+const minPrint = p => { const v = (p.opciones||[]).map(o=>+o.precio_usd||0).filter(Boolean); return v.length ? Math.min(...v) : 0; };
+
+const cardHTML = (x, kind, idx) => {
+  const src = imgSrc(x.foto), isNew = x.foto && blobs[x.foto];
+  const price = kind==='o' ? (+x.precio ? usd(x.precio) : 'Consultar precio') : (minPrint(x) ? 'desde ' + usd(minPrint(x)) : 'Sin precio');
+  return `<button class="card" data-edit="${kind}:${idx}">
+    <div class="ph">${src ? `<img src="${esc(src)}" alt="" loading="lazy">` : '<span class="empty">Falta la foto</span>'}${isNew?'<span class="badge">Nueva</span>':''}</div>
+    <div><div class="t">${esc(x.titulo||'Sin título')}</div><div class="m">${esc((x.medida||'—').replace(/x/i,'×'))} cm${kind==='p'?' · '+(x.tipo==='serigrafia'?'Serigrafía':'Lienzo'):''}</div><div class="p">${price}</div></div>
+  </button>`;
+};
+
+const render = () => {
+  const q = $('#q').value.trim().toLowerCase();
+  document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab===tab));
+  $('#sumO').textContent = `${data.originales.length} obras · ${priceRange(data.originales.map(x=>+x.precio))}`;
+  $('#sumP').textContent = `${data.prints.length} prints · ${priceRange(data.prints.map(minPrint))}`;
+  $('#addBtns').innerHTML = tab==='o'
+    ? '<button class="btn sm" data-add="o1">+ Original</button> <button class="btn ghost sm" data-add="o2">+ Par</button>'
+    : '<button class="btn sm" data-add="p">+ Print</button>';
+  $('#note').textContent = tab==='o'
+    ? 'Este es el orden en que se cuelgan en la sala. Arrastrá desde ⠿ para reordenar, o usá «Antes / Después» dentro de cada obra.'
+    : 'En la sala los prints se ordenan solos por tamaño, del más chico al más grande.';
+  let html = '';
+  if(tab==='o'){
+    const gs = groupsO(); let n = 0;
+    gs.forEach((g, gi) => {
+      const match = !q || g.some(i => (data.originales[i].titulo||'').toLowerCase().includes(q));
+      if(!match) return;
+      const pair = g.length > 1;
+      html += `<div class="grp${pair?' pair':''}" data-g="${gi}" ${q?'':'draggable="true"'}>
+        <div class="bar"><span class="n">${g.map(i=>i+1).join(' · ')}</span>${pair?'<span class="pairtag">Par</span>':''}${q?'':'<span class="handle" title="Arrastrar para mover">⠿</span>'}</div>
+        <div class="cards" style="--c:${g.length}">${g.map(i => cardHTML(data.originales[i], 'o', i)).join('')}</div></div>`;
+      n++;
+    });
+    if(!data.originales.length) html = '<div class="empty-state" style="grid-column:1/-1">Todavía no hay originales. Tocá «+ Original».</div>';
+  } else {
+    data.prints.map((x,i)=>({x,i})).sort((a,b)=>sizeKey(a.x)-sizeKey(b.x)).forEach(({x,i}) => {
+      if(q && !(x.titulo||'').toLowerCase().includes(q)) return;
+      html += `<div class="grp"><div class="cards">${cardHTML(x,'p',i)}</div></div>`;
+    });
+    if(!data.prints.length) html = '<div class="empty-state" style="grid-column:1/-1">Todavía no hay prints. Tocá «+ Print».</div>';
+  }
+  $('#grid').innerHTML = html || '<div class="empty-state" style="grid-column:1/-1">No hay obras con ese nombre.</div>';
+};
+
+// ---------- reordenar originales arrastrando grupos ----------
+let dragG = -1;
+$('#grid').addEventListener('dragstart', e => { const g = e.target.closest('.grp'); if(!g || tab!=='o') return; dragG = +g.dataset.g; g.classList.add('drag'); e.dataTransfer.effectAllowed = 'move'; try{ e.dataTransfer.setData('text/plain', dragG); }catch(_){} });
+$('#grid').addEventListener('dragend', () => { document.querySelectorAll('.grp').forEach(g => g.classList.remove('drag','over')); dragG = -1; });
+$('#grid').addEventListener('dragover', e => { const g = e.target.closest('.grp'); if(dragG<0 || !g) return; e.preventDefault(); document.querySelectorAll('.grp.over').forEach(x => x!==g && x.classList.remove('over')); g.classList.add('over'); });
+$('#grid').addEventListener('drop', e => { const g = e.target.closest('.grp'); if(dragG<0 || !g) return; e.preventDefault(); moveGroup(dragG, +g.dataset.g); });
+const moveGroup = (from, to) => {
+  if(from === to) return;
+  const gs = groupsO(), items = gs.map(g => g.map(i => data.originales[i]));
+  const [m] = items.splice(from, 1); items.splice(to, 0, m);
+  data.originales = items.flat(); setDirty(true); render();
+};
+
+// ---------- ficha de edición ----------
+let cur = null, curKind = 'o';
+const openDrawer = () => { $('#drawer').classList.add('on'); $('#scrim').classList.add('on'); };
+const closeDrawer = () => { $('#drawer').classList.remove('on'); $('#scrim').classList.remove('on'); cur = null; render(); };
+const field = (lb, inner, hint) => `<div class="f"><span class="lb">${lb}</span>${inner}${hint?`<div class="hint">${hint}</div>`:''}</div>`;
+const sizeParts = m => { const [a,b] = String(m||'').split(/[×x]/i); return [a||'', b||'']; };
+const dropHTML = (name, p, txt) => `<div class="drop" data-drop="${name}">${p ? `<img src="${esc(imgSrc(p))}" alt="">` : ''}<small>${p ? 'Tocá o arrastrá otra foto para reemplazarla' : txt}</small><input type="file" accept="image/*" data-file="${name}" aria-label="Elegir foto"></div>`;
+
+const drawDrawer = () => {
+  const x = cur, o = curKind === 'o', [w,h] = sizeParts(x.medida);
+  const idx = o ? data.originales.indexOf(x) : data.prints.indexOf(x);
+  $('#dTitle').textContent = x.titulo || (o ? 'Nuevo original' : 'Nuevo print');
+  let b = field('Foto', dropHTML('foto', x.foto, o ? 'Arrastrá la foto de la obra o tocá para elegirla<br>Ideal: la obra con su marco, recortada justo al borde' : (x.tipo==='serigrafia' ? 'Foto del papel solo, sin marco' : 'Imagen del print sin marco (el marco de madera lo pone la web)')));
+  if(!o){
+    b += field('Tipo', `<div class="seg"><button data-tipo="lienzo" aria-pressed="${x.tipo!=='serigrafia'}">Lienzo</button><button data-tipo="serigrafia" aria-pressed="${x.tipo==='serigrafia'}">Serigrafía</button></div>`);
+    if(x.tipo==='serigrafia') b += field('Foto con marco', dropHTML('foto_con_marco', x.foto_con_marco, 'Foto de la serigrafía con su marco de color (opcional)'));
+  }
+  b += field('Título', `<input class="in" data-k="titulo" value="${esc(x.titulo)}" placeholder="Nombre de la obra">`);
+  b += field('Medida (cm)', `<div class="row2"><input class="in" data-size="0" inputmode="numeric" value="${esc(w)}" placeholder="Ancho"><span>×</span><input class="in" data-size="1" inputmode="numeric" value="${esc(h)}" placeholder="Alto"></div>`);
+  b += field('Técnica', `<input class="in" data-k="tecnica" value="${esc(x.tecnica)}" placeholder="${o?'Óleo y pastel al óleo':'Impresión a 12 tintas sobre lienzo'}">`);
+  if(o){
+    b += `<div class="two">${field('Año', `<input class="in" data-k="anio" value="${esc(x.anio)}" inputmode="numeric">`)}${field('Precio (USD)', `<input class="in" data-k="precio" data-num value="${+x.precio||''}" inputmode="numeric" placeholder="0">`, '0 o vacío = «Consultar precio»')}</div>`;
+    b += `<label class="chk"><input type="checkbox" data-bool="metal" ${x.metal?'checked':''}> También se puede pedir sobre metal</label>`;
+    const prevPair = idx>0 && data.originales[idx-1].par_con_siguiente;
+    b += `<label class="chk"><input type="checkbox" data-bool="par_con_siguiente" ${x.par_con_siguiente?'checked':''} ${idx===data.originales.length-1?'disabled':''}> Forma par con la obra siguiente${prevPair?'<br><small style="color:var(--soft)">Esta obra ya es la segunda de un par.</small>':''}</label>`;
+    b += `<div class="move">Posición ${idx+1} de ${data.originales.length} <button class="btn ghost sm" data-mv="-1" ${idx===0?'disabled':''}>← Antes</button><button class="btn ghost sm" data-mv="1" ${idx===data.originales.length-1?'disabled':''}>Después →</button></div>`;
+  } else {
+    const ops = x.opciones ||= [];
+    b += `<div class="f"><span class="lb">Opciones y precios</span><div class="optsh"><span>Nombre</span><span>USD</span><span>Extra ARS</span><span></span></div><div class="opts">${ops.map((op,i)=>`<div class="opt"><input class="in" data-op="${i}:nombre" value="${esc(op.nombre)}" placeholder="Lienzo enmarcado"><input class="in" data-op="${i}:precio_usd" value="${+op.precio_usd||''}" inputmode="numeric" placeholder="0"><input class="in" data-op="${i}:extra_ars" value="${+op.extra_ars||''}" inputmode="numeric" placeholder="—"><button class="del" data-opdel="${i}" aria-label="Quitar opción">×</button></div>`).join('')}</div>
+      <button class="link" data-opadd style="margin-top:8px">+ Agregar opción</button><div class="hint">La última opción es la que se ve colgada en la pared (por ejemplo, la enmarcada).</div></div>`;
+    b += field('Tamaño en la pared', `<div class="seg">${[[1,'Normal'],[1.2,'Más grande'],[1.35,'Mucho más']].map(([v,l])=>`<button data-esc="${v}" aria-pressed="${(+x.escala||1)===v}">${l}</button>`).join('')}</div>`, 'Útil si una obra apaisada queda chica en la sala.');
+  }
+  $('#dBody').innerHTML = b;
+  $('#dFoot').innerHTML = `<button class="btn" data-close>Listo</button><span style="flex:1"></span><button class="link danger" data-del>Borrar obra</button>`;
+};
+
+const openItem = (kind, i) => { curKind = kind; cur = (kind==='o' ? data.originales : data.prints)[i]; drawDrawer(); openDrawer(); $('#drawer .db').scrollTop = 0; };
+
+const setPhoto = async (name, file) => {
+  if(!file || !file.type.startsWith('image/')){ toast('Elegí un archivo de imagen (JPG o PNG).'); return; }
+  try{
+    const blob = await shrink(file);
+    const path = `/${UPLOADS}/${slug(cur.titulo)}-${Date.now().toString(36)}.jpg`;
+    blobs[path] = {blob, url: URL.createObjectURL(blob)};
+    cur[name] = path; setDirty(true); drawDrawer();
+  }catch(e){ toast(e.message); }
+};
+
+// ---------- eventos ----------
+document.addEventListener('click', async e => {
+  const t = e.target.closest('button,[data-close]'); if(!t) return;
+  if(t.id === 'loginBtn'){ $('#loginErr').textContent = ''; try{ token = await login(); saveToken(token); await start(); }catch(err){ $('#loginErr').textContent = err.message; } }
+  else if(t.dataset.tab){ tab = t.dataset.tab; $('#q').value = ''; render(); }
+  else if(t.dataset.edit){ const [k,i] = t.dataset.edit.split(':'); openItem(k, +i); }
+  else if(t.dataset.add){
+    if(t.dataset.add === 'p'){ data.prints.push({titulo:'', tipo:'lienzo', foto:'', medida:'70×50', tecnica:'Impresión a 12 tintas sobre lienzo', opciones:[{nombre:'Lienzo', precio_usd:0},{nombre:'Lienzo enmarcado en madera', precio_usd:0}]}); setDirty(true); openItem('p', data.prints.length-1); }
+    else { const base = () => ({titulo:'', foto:'', medida:'130×100', tecnica:'Óleo y pastel al óleo', anio:String(new Date().getFullYear()), precio:0, metal:false, par_con_siguiente:false});
+      const a = base(); if(t.dataset.add === 'o2') a.par_con_siguiente = true;
+      data.originales.push(a); if(t.dataset.add === 'o2') data.originales.push(base());
+      setDirty(true); openItem('o', data.originales.indexOf(a)); toast(t.dataset.add==='o2' ? 'Par agregado al final. Completá la primera obra y después la segunda.' : 'Original agregado al final de la sala.'); }
+    render();
+  }
+  else if(t.dataset.tipo){ cur.tipo = t.dataset.tipo; if(cur.tipo !== 'serigrafia') delete cur.foto_con_marco; setDirty(true); drawDrawer(); }
+  else if(t.dataset.esc){ cur.escala = +t.dataset.esc; if(cur.escala === 1) delete cur.escala; setDirty(true); drawDrawer(); }
+  else if(t.hasAttribute('data-opadd')){ (cur.opciones ||= []).push({nombre:'', precio_usd:0}); setDirty(true); drawDrawer(); }
+  else if(t.dataset.opdel){ cur.opciones.splice(+t.dataset.opdel, 1); setDirty(true); drawDrawer(); }
+  else if(t.dataset.mv){ const a = data.originales, i = a.indexOf(cur), j = i + (+t.dataset.mv); if(j<0 || j>=a.length) return; [a[i], a[j]] = [a[j], a[i]]; setDirty(true); drawDrawer(); render(); }
+  else if(t.hasAttribute('data-del')){
+    const ok = await confirmBox('¿Borrar esta obra?', `«${cur.titulo || 'Sin título'}» se va a quitar de la galería cuando publiques los cambios.`, 'Borrar');
+    if(!ok) return;
+    const arr = curKind==='o' ? data.originales : data.prints, i = arr.indexOf(cur);
+    if(curKind==='o' && i>0 && !cur.par_con_siguiente && arr[i-1].par_con_siguiente) arr[i-1].par_con_siguiente = false;
+    arr.splice(i, 1); setDirty(true); closeDrawer(); toast('Obra borrada. Publicá para que se vea en la web.');
+  }
+  else if(t.hasAttribute('data-close')) closeDrawer();
+  else if(t.id === 'publish') publish();
+  else if(t.id === 'logout'){ if(dirty && !(await confirmBox('Tenés cambios sin publicar', 'Si salís ahora se pierden.', 'Salir igual'))) return; try{ localStorage.removeItem('aq-admin-token'); localStorage.removeItem('decap-cms-user'); }catch(_){} dirty = false; location.reload(); }
+});
+$('#scrim').addEventListener('click', closeDrawer);
+addEventListener('keydown', e => { if(e.key === 'Escape' && cur) closeDrawer(); });
+$('#q').addEventListener('input', render);
+$('#dBody').addEventListener('input', e => {
+  const t = e.target; if(!cur) return;
+  if(t.dataset.k){ cur[t.dataset.k] = t.hasAttribute('data-num') ? (+t.value.replace(/\D/g,'')||0) : t.value; if(t.dataset.k==='titulo') $('#dTitle').textContent = t.value || 'Sin título'; }
+  else if(t.dataset.size){ const p = document.querySelectorAll('[data-size]'); const a = p[0].value.replace(/\D/g,''), b = p[1].value.replace(/\D/g,''); cur.medida = (a||b) ? `${a}×${b}` : ''; }
+  else if(t.dataset.op){ const [i,k] = t.dataset.op.split(':'); cur.opciones[+i][k] = k==='nombre' ? t.value : (+t.value.replace(/\D/g,'')||0); if(k==='extra_ars' && !cur.opciones[+i][k]) delete cur.opciones[+i][k]; }
+  else return;
+  setDirty(true);
+});
+$('#dBody').addEventListener('change', e => {
+  const t = e.target; if(!cur) return;
+  if(t.dataset.bool){ cur[t.dataset.bool] = t.checked; setDirty(true); drawDrawer(); }
+  else if(t.dataset.file && t.files[0]) setPhoto(t.dataset.file, t.files[0]);
+});
+['dragover','dragleave','drop'].forEach(ev => $('#dBody').addEventListener(ev, e => {
+  const d = e.target.closest('.drop'); if(!d) return; e.preventDefault();
+  d.classList.toggle('over', ev === 'dragover');
+  if(ev === 'drop' && e.dataTransfer.files[0]) setPhoto(d.dataset.drop, e.dataTransfer.files[0]);
+}));
+
+// ---------- diálogo ----------
+const confirmBox = (title, text, okLabel, alertOnly) => new Promise(res => {
+  $('#modalRoot').innerHTML = `<div class="modal"><div class="box"><h3>${esc(title)}</h3><p>${esc(text)}</p><div class="bb">${alertOnly?'':'<button class="btn ghost" data-r="0">Cancelar</button>'}<button class="btn red" data-r="1">${esc(okLabel)}</button></div></div></div>`;
+  $('#modalRoot').querySelectorAll('[data-r]').forEach(b => b.onclick = () => { $('#modalRoot').innerHTML = ''; res(b.dataset.r === '1'); });
+});
+const progressBox = () => { $('#modalRoot').innerHTML = `<div class="modal"><div class="box"><h3>Publicando</h3><p id="pmsg">Preparando…</p><div class="prog"><i id="pbar"></i></div></div></div>`; return (m, f) => { $('#pmsg').textContent = m; $('#pbar').style.width = Math.round(f*100)+'%'; }; };
+
+// ---------- publicar ----------
+const validate = () => {
+  const bad = [];
+  data.originales.forEach((x,i) => { if(!x.foto) bad.push(`Original ${i+1} (${x.titulo||'sin título'}): falta la foto`); if(!x.titulo) bad.push(`Original ${i+1}: falta el título`); if(x.medida && x.medida!=='×' && !/^\d+×\d+$/.test(x.medida)) bad.push(`${x.titulo||'Original '+(i+1)}: revisá la medida`); });
+  data.prints.forEach(x => { if(!x.foto) bad.push(`Print «${x.titulo||'sin título'}»: falta la foto`); if(!x.titulo) bad.push('Hay un print sin título'); if(!(x.opciones||[]).length) bad.push(`Print «${x.titulo}»: agregale al menos una opción`); if(!/^\d+×\d+$/.test(x.medida||'')) bad.push(`Print «${x.titulo||'sin título'}»: revisá la medida`); });
+  return bad;
+};
+const publish = async () => {
+  const bad = validate();
+  if(bad.length){ await confirmBox('Faltan datos', bad.slice(0,4).join(' · ') + (bad.length>4 ? ` y ${bad.length-4} más.` : ''), 'Entendido', true); return; }
+  const used = new Set([...data.originales.map(x=>x.foto), ...data.prints.flatMap(x=>[x.foto, x.foto_con_marco])].filter(Boolean));
+  const pend = Object.keys(blobs).filter(p => used.has(p) && !blobs[p].done);
+  const step = progressBox(), total = pend.length + 1;
+  try{
+    for(let i=0; i<pend.length; i++){
+      step(`Subiendo foto ${i+1} de ${pend.length}…`, i/total);
+      if(!DEMO){ const bytes = new Uint8Array(await blobs[pend[i]].blob.arrayBuffer());
+        await gh(`/repos/${REPO}/contents/${pend[i].replace(/^\//,'')}`, {method:'PUT', body:JSON.stringify({message:'Panel: subir foto', content:bytesToB64(bytes), branch:BRANCH})}); }
+      blobs[pend[i]].done = true;
+    }
+    step('Guardando obras…', pend.length/total);
+    if(!DEMO){
+      const clean = JSON.stringify(data, null, 2) + '\n';
+      const r = await gh(`/repos/${REPO}/contents/${DATA}`, {method:'PUT', body:JSON.stringify({message:'Panel: actualizar obras', content:textToB64(clean), sha, branch:BRANCH})});
+      sha = r.content.sha;
+    }
+    step('Listo', 1); setDirty(false);
+    $('#modalRoot').innerHTML = `<div class="modal"><div class="box"><h3>Publicado</h3><p>La web se actualiza sola en uno o dos minutos.</p><div class="bb"><a class="btn ghost" href="/" target="_blank" rel="noopener">Ver web ↗</a><button class="btn" data-ok>Seguir editando</button></div></div></div>`;
+    $('#modalRoot [data-ok]').onclick = () => { $('#modalRoot').innerHTML = ''; };
+  }catch(err){
+    const msg = err.status === 409 ? 'Alguien guardó cambios desde otro lado mientras editabas. Recargá la página y volvé a hacer tus cambios.' : err.status === 401 ? 'Se venció la sesión. Salí y volvé a entrar con GitHub.' : err.message;
+    $('#modalRoot').innerHTML = ''; await confirmBox('No se pudo publicar', msg, 'Entendido', true);
+  }
+};
+
+// ---------- inicio ----------
+const start = async () => {
+  if(!DEMO){ const u = await gh('/user'); user = u.login; }
+  else user = 'demo';
+  await loadData();
+  $('#login').classList.add('hidden'); $('#app').classList.remove('hidden');
+  $('#who').innerHTML = `${esc(user)}<button id="logout">Salir</button>`;
+  render();
+};
+(async () => {
+  token = DEMO ? 'demo' : readToken();
+  if(!token){ $('#login').classList.remove('hidden'); return; }
+  try{ await start(); }
+  catch(err){ token = ''; $('#login').classList.remove('hidden'); if(err.status !== 401) $('#loginErr').textContent = 'No se pudieron leer las obras: ' + err.message; }
+})();
+}
+</script>
 </body>
 </html>

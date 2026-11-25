@@ -1,0 +1,90 @@
+# Panel de administración de la galería de Aquiles (Decap CMS)
+# Lo único que hay que completar es la línea "repo" con TU_USUARIO_DE_GITHUB/nombre-del-repositorio
+
+backend:
+  name: github
+  repo: TU_USUARIO_DE_GITHUB/aquiles-web
+  branch: main
+  commit_messages:
+    update: "Actualizar {{collection}}"
+
+locale: es
+site_url: /
+display_url: /
+
+# Dónde se guardan las fotos que se suben desde el panel
+media_folder: img/obras
+public_folder: /img/obras
+
+collections:
+  - name: galeria
+    label: Galería
+    editor:
+      preview: false
+    files:
+      - name: obras
+        label: Obras (originales y prints)
+        file: data/obras.json
+        format: json
+        fields:
+          - label: Originales
+            name: originales
+            widget: list
+            label_singular: original
+            summary: "{{fields.titulo}} · {{fields.medida}} cm · USD {{fields.precio}}"
+            hint: "El orden de esta lista es el orden en que se cuelgan en la sala. Arrastrá para reordenar."
+            fields:
+              - { label: "Título", name: titulo, widget: string }
+              - label: "Foto"
+                name: foto
+                widget: image
+                hint: "Foto de la obra sola, recortada justo al borde del marco. Ideal: JPG de 1200 a 1600 px de lado y menos de 600 KB."
+              - { label: "Medida (cm)", name: medida, widget: string, hint: "Ancho×Alto, por ejemplo 130×100" }
+              - { label: "Técnica", name: tecnica, widget: string, required: false }
+              - { label: "Año", name: anio, widget: string, required: false, default: "2026" }
+              - { label: "Precio (USD)", name: precio, widget: number, value_type: int, min: 0, default: 0, hint: "Poné 0 para que diga «Consultar precio»." }
+              - { label: "También sobre metal (a consultar)", name: metal, widget: boolean, default: false, required: false }
+              - label: "Se cuelga en par con la obra siguiente"
+                name: par_con_siguiente
+                widget: boolean
+                default: false
+                required: false
+                hint: "Activalo en la PRIMERA obra del par. Las dos quedan juntas en la pared."
+
+          - label: Prints
+            name: prints
+            widget: list
+            label_singular: print
+            summary: "{{fields.titulo}} · {{fields.medida}} cm"
+            hint: "En la sala de prints se ordenan solos por tamaño, del más chico al más grande."
+            fields:
+              - { label: "Título", name: titulo, widget: string }
+              - label: "Tipo"
+                name: tipo
+                widget: select
+                default: lienzo
+                options:
+                  - { label: "Impresión sobre lienzo", value: lienzo }
+                  - { label: "Serigrafía en papel", value: serigrafia }
+              - label: "Foto"
+                name: foto
+                widget: image
+                hint: "Lienzo: la imagen del print sin marco (el marco de madera lo agrega la web). Serigrafía: el papel solo, sin marco."
+              - label: "Foto con marco (solo serigrafías)"
+                name: foto_con_marco
+                widget: image
+                required: false
+                hint: "Foto de la serigrafía con su marco de color. Si no hay, se usa la foto sin marco."
+              - { label: "Medida (cm)", name: medida, widget: string, hint: "Ancho×Alto, por ejemplo 70×50" }
+              - { label: "Técnica", name: tecnica, widget: string, required: false }
+              - label: "Opciones y precios"
+                name: opciones
+                widget: list
+                label_singular: opción
+                summary: "{{fields.nombre}} · USD {{fields.precio_usd}}"
+                hint: "La ÚLTIMA opción es la que se muestra en la pared (por ejemplo, la enmarcada)."
+                fields:
+                  - { label: "Nombre", name: nombre, widget: string, hint: "Por ejemplo: Lienzo, Lienzo enmarcado en madera, Sin marco, Con marco y vidrio" }
+                  - { label: "Precio (USD)", name: precio_usd, widget: number, value_type: int, min: 0 }
+                  - { label: "Extra en pesos (ARS)", name: extra_ars, widget: number, value_type: int, min: 0, required: false, hint: "Opcional, por ejemplo el marco con vidrio." }
+              - { label: "Agrandar en la pared", name: escala, widget: number, value_type: float, min: 0.5, max: 2, step: 0.05, default: 1, required: false, hint: "1 = normal. Usalo si una obra apaisada queda chica (por ejemplo 1.35)." }

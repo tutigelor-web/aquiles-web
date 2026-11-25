@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aquiles · Galería</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<style>
+/* VOICE hushed: a white gallery you walk through, the work does the talking
+   IDEA a curved white room; paintings hang on the outer wall with museum labels, you walk along it
+   PICTURE CSS 3D corridor: true-scale artworks, labels, floor shadow line, the wall bending away into white
+   COLOUR white wall, pale grey floor, black ink; the artist's red only for the logo and one action
+   TYPE Big Shoulders Display for the caption title (poster caps) + Figtree for labels
+   LAYOUT full-screen room; thin top bar, caption + arrows bottom centre; phone same, caption stacks */
+:root{--logo:url(data:image/png;base64,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);--ink:#141414;--soft:#77736d;--red:#f0401b;--line:#e6e4e0}
+*{box-sizing:border-box;min-width:0}
+html,body{height:100%;margin:0}
+body{background:#fff;color:var(--ink);font:16px/1.5 Figtree,system-ui,sans-serif;overflow:hidden;color-scheme:light}
+/* cursor rojo como el logo */
+html,body{cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'><path d='M3 2l15 7.5-6.2 1.8L9 17.5z' fill='%23f0401b'/></svg>") 2 1,auto}
+button{font:inherit;color:inherit;cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14'><circle cx='7' cy='7' r='4.5' fill='%23f0401b'/></svg>") 7 7,pointer}
+a{cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14'><circle cx='7' cy='7' r='4.5' fill='%23f0401b'/></svg>") 7 7,pointer}
+a{color:inherit}
+#view{position:fixed;inset:0;overflow:hidden;background:linear-gradient(#fff 0,#fbfbfa 46%,#efeeec 62%,#e7e6e3 100%);touch-action:none;cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20'><circle cx='10' cy='10' r='7' fill='%23f0401b' fill-opacity='.15' stroke='%23f0401b' stroke-width='1.5'/><circle cx='10' cy='10' r='1.8' fill='%23f0401b'/></svg>") 10 10,grab;perspective-origin:50% 42%}
+#view.drag{cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><circle cx='8' cy='8' r='5.5' fill='%23f0401b'/></svg>") 8 8,grabbing}
+#view,#view *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+#view img{-webkit-user-drag:none}
+#view ::selection{background:transparent}
+#world{position:absolute;left:50%;top:42%;width:0;height:0;transform-style:preserve-3d;transition:left .6s cubic-bezier(.2,.7,.2,1)}
+#view{transition:perspective-origin .6s cubic-bezier(.2,.7,.2,1)}
+@media(min-width:641px){#view.focus{perspective-origin:calc(50% - 220px) 42%}#view.focus #world{left:calc(50% - 220px)}#view.focus~.cap{right:440px}#view.focus~.cap .mid{opacity:0;pointer-events:none}}
+.cap{transition:right .6s cubic-bezier(.2,.7,.2,1)}.cap .mid{transition:opacity .3s}
+#world>*{position:absolute;transform-style:preserve-3d;backface-visibility:hidden}
+.ln{background:#dcdad6;height:9px}
+.fl{background:linear-gradient(#d9d7d3,rgba(231,230,227,0));backface-visibility:visible!important}
+.cl{background:#efeeec;height:6px}
+.slot{display:flex;align-items:flex-start}
+.art{position:relative;flex:none;box-shadow:0 54px 90px -36px rgba(0,0,0,.35),0 6px 12px rgba(0,0,0,.12);background:#eee}
+.art img{display:block;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.art.ser{background:none;padding:0;box-shadow:0 42px 72px -36px rgba(0,0,0,.3)}
+.art.ser img{object-fit:cover}
+.art.ser.fr{padding:0;background:none;box-shadow:0 54px 90px -36px rgba(0,0,0,.4),0 6px 12px rgba(0,0,0,.15)}
+.art.ser.fr img{object-fit:cover}
+.art.lz{box-shadow:15px 0 0 #d8d2c8,0 54px 90px -36px rgba(0,0,0,.35)}
+.art.lz img{filter:saturate(.9) contrast(.96) brightness(.97)}
+/* marco flotante de madera clara: 1,2 cm de frente y 1 cm de separación (U = 600 px por metro) */
+.art.lz.fr{border:7px solid #cfac7a;border-image:linear-gradient(160deg,#dcbf92,#c39d68 55%,#b48d5a) 1;padding:6px;background:#c9bfb1;box-shadow:inset 0 0 10px rgba(60,45,30,.28),0 0 0 1px #a88552,0 54px 90px -36px rgba(0,0,0,.4),0 6px 12px rgba(0,0,0,.15)}
+.art.p3d{transform:translateZ(var(--d,20px));transform-style:preserve-3d}
+.art.p3d::before{content:"";position:absolute;left:var(--o,0px);top:var(--o,0px);width:var(--d,20px);height:calc(100% - 2*var(--o,0px));background:var(--side,#b48d5a);transform-origin:0 50%;transform:rotateY(90deg);backface-visibility:visible}
+.art.p3d.lz.fr,.art.p3d.ser.fr{box-shadow:18px 30px 40px -8px rgba(40,30,20,.34),6px 10px 14px rgba(40,30,20,.18)}
+.art.p3d.lz.fr{box-shadow:inset 0 0 10px rgba(60,45,30,.28),0 0 0 1px #a88552,18px 30px 40px -8px rgba(40,30,20,.34),6px 10px 14px rgba(40,30,20,.18)}
+.art.lz.fr img{box-shadow:0 1px 6px rgba(40,30,20,.22)}
+.lab{flex:none;width:250px;margin-left:70px;font-size:15px;line-height:1.35;color:#2b2a28}
+.lab b{display:block;font-size:19px;color:var(--ink)}
+.lab .p{display:block;margin-top:8px;font-weight:700;font-size:18px}
+.top{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;gap:16px;padding:14px max(3vw,16px);z-index:5;pointer-events:none}
+.top>*{pointer-events:auto}
+.logo{height:34px;width:auto;display:block}
+.rooms{display:flex;gap:4px;margin:0 auto}
+.rooms button,.ghost{border:0;background:none;padding:10px 12px;font-size:15px;font-weight:600;color:var(--soft);min-height:44px}
+.rooms button[aria-current=true]{color:var(--red);text-decoration:underline;text-underline-offset:6px}
+.rooms button{transition:color .2s,border-color .2s}
+.rooms button:hover{color:var(--red)!important;border-color:var(--red)!important}
+.menu{position:relative;width:70px;display:flex;justify-content:flex-end}
+.burger{width:44px;height:44px;border:0;background:none;display:grid;place-content:center;gap:5px;padding:0}
+.burger i{display:block;width:22px;height:2px;background:var(--ink);border-radius:2px}
+.drop{position:absolute;right:0;top:50px;background:#fff;border:1px solid var(--line);border-radius:6px;box-shadow:0 12px 30px rgba(0,0,0,.08);padding:6px;min-width:200px;display:flex;flex-direction:column}
+.drop[hidden]{display:none}
+.drop button{border:0;background:none;text-align:left;padding:12px 14px;font-size:15px;font-weight:500;border-radius:4px;min-height:44px}
+.drop button:hover{background:#f4f3f1}
+.bag{border:1px solid var(--ink);border-radius:99px;background:#fff;padding:9px 16px;font-size:15px;font-weight:600;min-height:44px}
+.cap{position:fixed;left:0;right:0;bottom:0;padding:0 max(3vw,16px) 22px;display:grid;grid-template-columns:auto 1fr auto;align-items:end;gap:16px;z-index:5;pointer-events:none}
+.cap>*{pointer-events:auto}
+.cap .mid{text-align:center;justify-self:center;max-width:560px}
+.cap h1{font-family:"Big Shoulders Display",Impact,sans-serif;font-weight:800;font-size:clamp(28px,3.4vw,42px);line-height:1;margin:0;text-transform:uppercase;letter-spacing:.01em}
+.cap .meta{font-size:14px;color:var(--soft);margin:6px 0 10px}
+.cap .meta strong{color:var(--ink);white-space:nowrap}
+.seerow{display:flex;gap:8px;justify-content:center}
+.see{border:1px solid #cfccc6;background:transparent;border-radius:99px;padding:9px 18px;font-weight:500;font-size:15px;color:var(--soft);min-height:44px;transition:color .2s,border-color .2s}
+.see:hover{color:var(--red);border-color:var(--red)}
+.arr{width:52px;height:52px;border:0;background:none;color:#9a968f;display:grid;place-items:center;padding:0;transition:color .2s}
+.arr:hover:not(:disabled){color:var(--red)}
+.arr:disabled{opacity:.25;cursor:default}
+.prog{position:fixed;left:0;bottom:0;height:3px;background:var(--ink);z-index:6;transition:width .2s}
+.hint{font-size:13px;color:var(--soft);margin-top:10px;transition:opacity .6s}
+.idx{position:fixed;right:max(3vw,16px);bottom:92px;z-index:5}
+.lobby{position:fixed;inset:0;z-index:20;background:#fff;display:grid;place-items:center;padding:24px;transition:opacity .6s}
+.lobby.off{opacity:0;pointer-events:none}
+.lobby .in{width:min(980px,100%);text-align:center}
+.lobby img{height:clamp(54px,9vw,96px);width:auto;margin:0 auto 14px}
+.lobby p{color:var(--soft);margin:0 0 34px}
+.doors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(16px,3vw,40px)}
+.door{border:0;background:none;padding:0;text-align:left}
+.door .hole{position:relative;aspect-ratio:4/5;background:linear-gradient(#f6f5f3,#ebe9e6 70%,#e0deda);overflow:hidden;border-radius:2px;box-shadow:inset 0 0 0 10px #fff,inset 0 0 0 11px var(--line)}
+.door .hole img{position:absolute;box-shadow:0 10px 18px -8px rgba(0,0,0,.35);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.door:hover .hole img{transform:scale(1.05)}
+.door .t{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:12px;flex-wrap:wrap}
+.door .t span:first-child{font-family:"Big Shoulders Display",Impact,sans-serif;font-weight:800;font-size:34px;text-transform:uppercase}
+.door .t span:last-child{color:var(--soft);white-space:nowrap}
+.panel{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:#fff;z-index:15;box-shadow:-20px 0 40px rgba(0,0,0,.08);transform:translateX(105%);transition:transform .45s cubic-bezier(.2,.7,.2,1);display:flex;flex-direction:column;overflow:auto}
+.panel.on{transform:none}
+.panel .pin{padding:22px 26px 28px;display:flex;flex-direction:column;gap:12px}
+.panel .x{align-self:flex-end;border:0;background:none;font-size:26px;width:44px;height:44px}
+.panel .im{background:#f4f3f1;padding:clamp(36px,8%,56px) clamp(32px,10%,60px);display:grid;place-items:center}
+.panel .im img{display:block;max-width:100%;max-height:32vh;width:auto;height:auto;object-fit:contain;box-shadow:0 10px 22px -10px rgba(0,0,0,.4)} /* la obra entra entera, con aire alrededor */
+/* vista previa del formato del print en la ficha: cambia igual que en la pared */
+.pv{position:relative;box-shadow:0 12px 24px -10px rgba(40,30,20,.4)}
+.panel .im .pv img{width:100%;height:100%;max-height:none;object-fit:cover;box-shadow:none}
+.pv.lz{box-shadow:4px 0 0 #d8d2c8,0 12px 24px -10px rgba(40,30,20,.4)}
+.pv.lz img{filter:saturate(.9) contrast(.96) brightness(.97)}
+.pv.lz.fr{border:4px solid #cfac7a;border-image:linear-gradient(160deg,#dcbf92,#c39d68 55%,#b48d5a) 1;padding:3px;background:#c9bfb1;box-shadow:inset 0 0 6px rgba(60,45,30,.28),0 0 0 1px #a88552,0 12px 24px -10px rgba(40,30,20,.4)}
+.pv.lz.fr img{box-shadow:0 1px 4px rgba(40,30,20,.22)}
+.pv.ser{background:none;padding:0}
+.panel .im .pv.ser img{object-fit:cover}
+.panel .im .pv.ser.fr{padding:0;background:none}
+.panel .im .pv.ser.fr img{object-fit:cover}
+.panel h2{font-family:"Big Shoulders Display",Impact,sans-serif;font-size:40px;line-height:1;margin:0;text-transform:uppercase}
+.spec{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;margin:0;font-size:15px}
+.spec dt{color:var(--soft)}.spec dd{margin:0}
+.opt{display:flex;justify-content:space-between;gap:10px;width:100%;border:1px solid var(--line);background:#fff;border-radius:4px;padding:12px 14px;margin-bottom:6px;text-align:left;min-height:48px}
+.opt[aria-pressed=true]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.opt strong{white-space:nowrap}
+.price{font-size:30px;font-weight:700;white-space:nowrap}
+.note{font-size:14px;color:var(--soft);margin:0}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:0;border-radius:99px;padding:12px 20px;font-weight:600;text-decoration:none;min-height:48px;display:inline-flex;align-items:center;font-size:15px}
+.btn.k{background:var(--ink);color:#fff}.btn.l{border:1px solid var(--ink);background:#fff}
+.bridge{border-top:1px solid var(--line);padding-top:12px;font-size:15px}
+.bridge button{border:0;background:none;padding:0;text-decoration:underline;font-weight:600}
+.row{display:grid;grid-template-columns:52px 1fr auto;gap:12px;align-items:center;border-bottom:1px solid var(--line);padding:10px 0}
+.row img{width:52px;height:52px;object-fit:cover}
+.row small{display:block;color:var(--soft)}
+.row button{border:0;background:none;color:var(--soft);min-height:40px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:14px}
+.grid button{border:0;background:none;padding:0;text-align:left;font-size:14px}
+.grid .th{aspect-ratio:4/5;background:#f4f3f1;display:flex;align-items:center;justify-content:center;padding:12px;margin-bottom:6px;overflow:hidden}
+.grid .th img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;box-shadow:0 4px 10px -4px rgba(0,0,0,.35)} /* misma caja gris para todas: nombres y precios alineados */
+.grid small{color:var(--soft);display:block}
+.sorts{display:flex;gap:6px;flex-wrap:wrap}
+.sorts button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:8px 14px;font-size:14px;min-height:40px}
+.sorts button[aria-pressed=true]{border-color:var(--ink)}
+.sorts .arw{display:inline-flex;vertical-align:-2px;margin-left:4px}
+.toast{position:fixed;left:50%;top:76px;transform:translate(-50%,-20px);opacity:0;background:var(--ink);color:#fff;padding:10px 18px;border-radius:99px;font-size:14px;z-index:30;transition:.3s;pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+@media(max-width:640px){.menu{width:44px}.rooms{margin:0 0 0 auto;gap:6px}.rooms button{border:1px solid var(--line);border-radius:99px;padding:8px 14px;font-size:14px;min-height:40px;background:#fff;text-decoration:none!important}.rooms button[aria-current=true]{border-color:var(--red);color:var(--red)}.top{justify-content:space-between}.cap{grid-template-columns:auto 1fr auto;gap:8px;padding-bottom:16px}.arr{width:46px;height:46px}.cap .meta{font-size:13px}.doors{gap:12px}.door .t span:first-child{font-size:21px}.door .t span:last-child{font-size:14px}.idx{bottom:auto;top:62px;right:16px}.lobby p{margin-bottom:22px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+/* vista macro: al abrir una obra, a la izquierda se ve un detalle ampliado de su textura */
+#macro{position:fixed;top:0;left:0;right:440px;bottom:0;z-index:4;overflow:hidden;background:#efeeec;opacity:0;pointer-events:none;transition:opacity .5s ease}
+#macro.on{opacity:1}
+#macro .mi{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.9);animation:macroPan 16s ease-in-out infinite alternate;filter:contrast(1.04) saturate(.95)}
+#macro::after{content:"";position:absolute;inset:0;pointer-events:none;mix-blend-mode:multiply;opacity:.55;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55 0 0 0 0 .5 0 0 0 0 .45 0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");box-shadow:inset 0 0 80px rgba(60,45,30,.18)}
+@keyframes macroPan{from{transform:scale(1.9) translate(-5%,-4%)}to{transform:scale(1.9) translate(5%,4%)}}
+@media(max-width:640px){#macro{display:none}}
+@media(prefers-reduced-motion:reduce){#macro .mi{animation:none}}
+body.macro .cap,body.macro .prog,body.macro .rooms,body.macro .menu{opacity:0;pointer-events:none}
+.rooms,.menu,.cap,.prog{transition:opacity .4s}
+
+@media(min-width:641px){body.pop .cap{right:440px}body.pop .cap .mid{opacity:0;pointer-events:none}}
+/* pantalla de carga: galería vacía y el logo que se llena de rojo */
+#load{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:transparent;transition:opacity .7s ease,visibility .7s}
+#load.done{opacity:0;visibility:hidden}
+#load .lg{position:relative;width:min(112px,27vw);aspect-ratio:2.01}
+#load .lg i{position:absolute;inset:0;background:var(--logo) center/contain no-repeat}
+#load .lg .b{filter:grayscale(1) brightness(1.9) contrast(.35);opacity:.55}
+#load .lg .f{clip-path:inset(0 calc(100% - var(--p,0%)) 0 0);transition:clip-path .35s ease}
+#load .pc{display:none;position:absolute;left:0;right:0;top:calc(100% + 18px);text-align:center;font-size:13px;color:var(--soft);font-variant-numeric:tabular-nums}
+/* mientras carga: se ven solo las líneas de la sala; después aparecen cuadros y botones */
+.slot .art{transition:opacity .9s ease}
+.top,.cap,.prog{transition:opacity .7s ease .15s}
+body.loading .slot .art{opacity:0}
+body.loading .top,body.loading .cap,body.loading .prog{opacity:0;pointer-events:none}
+.itabs{display:flex;flex-wrap:wrap;gap:4px 20px;margin:0 0 4px}
+.itabs button{border:0;background:none;padding:6px 0;font-family:"Big Shoulders Display",Impact,sans-serif;font-weight:800;font-size:32px;line-height:1;text-transform:uppercase;color:#c9c5bf;flex:none;transition:color .2s;min-height:44px}
+.itabs button:hover{color:var(--red)}
+.itabs button[aria-selected=true]{color:var(--ink)}
+</style>
+</head>
+<body class="loading">
+<div id="load" aria-live="polite"><div class="lg"><i class="b"></i><i class="f"></i><div class="pc" id="lpc">0%</div></div></div>
+<div id="view" aria-label="Galería: arrastrá, scrolleá o usá las flechas para caminar"><div id="world"></div></div>
+
+<header class="top">
+  <button class="ghost" id="home" aria-label="Ir al inicio de Originales" style="padding:6px 0"><img class="logo" src="img/logo-s.png" alt="Aquiles"></button>
+  <nav class="rooms"><button data-room="o">Originales</button><button data-room="p">Prints</button></nav>
+  <div class="menu"><button class="burger" id="burger" aria-label="Menú" aria-expanded="false"><i></i><i></i><i></i></button>
+    <div class="drop" id="drop" hidden><button data-idx>Todas las obras</button></div></div>
+</header>
+
+<div id="macro" aria-hidden="true"><div class="mi"></div></div>
+<div class="cap">
+  <button class="arr" id="prev" aria-label="Obra anterior"><svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M25 7H1M7 1L1 7l6 6"/></svg></button>
+  <div class="mid"><h1 id="ct"></h1><div class="meta" id="cm"></div><div class="seerow"><button class="see" id="see">Ver obra</button></div><div class="hint" id="hint">Scrolleá, arrastrá o usá las flechas para caminar</div></div>
+  <button class="arr" id="next" aria-label="Obra siguiente"><svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 7h24M19 1l6 6-6 6"/></svg></button>
+</div>
+<div class="prog" id="prog"></div>
+
+<aside class="panel" id="panel" aria-label="Detalle"></aside>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+{
+const WA_NUMBER = '5491140240962'; // WhatsApp del artista con código de país, ej. 5491100000000
+const AR = {"img/ff-atomica.jpg":0.744,"img/ff-tanque.jpg":0.743,"img/ff-valvula.jpg":0.753,"img/f-atomica.jpg":0.72,"img/f-tanque.jpg":0.72,"img/f-temperaturas.jpg":1.24,"img/f-valvula.jpg":0.73,"img/o-002-0.jpg":0.776,"img/o-002-1.jpg":0.774,"img/o-003-0.jpg":0.785,"img/o-003-1.jpg":0.772,"img/o-004-0.jpg":0.785,"img/o-004-1.jpg":0.77,"img/o-005-0.jpg":0.785,"img/o-005-1.jpg":0.77,"img/o-006-0.jpg":0.881,"img/o-007-0.jpg":1.433,"img/o-008-0.jpg":1.441,"img/o-009-0.jpg":0.878,"img/o-009-1.jpg":0.848,"img/o-010-0.jpg":1.388,"img/o-011-0.jpg":1.393,"img/o-012-0.jpg":1.441,"img/o-013-0.jpg":0.832,"img/o-013-1.jpg":0.828,"img/o-014-0.jpg":1.312,"img/o-015-0.jpg":1.206,"img/o-016-0.jpg":1.532,"img/o-017-0.jpg":1.441,"img/o-018-0.jpg":1.388,"img/o-019-0.jpg":1.392,"img/o-020-0.jpg":1.439,"img/o-021-0.jpg":1.434,"img/o-022-0.jpg":0.879,"img/o-022-1.jpg":0.846,"img/o-023-0.jpg":1.441,"img/o-024-0.jpg":1.529,"img/o-024-a.jpg":1.443,"img/o-025-0.jpg":1.393,"img/o-026-0.jpg":0.877,"img/o-026-1.jpg":0.859,"img/o-027-0.jpg":0.85,"img/o-027-1.jpg":0.82,"img/o-028-0.jpg":1.526,"img/o-029-0.jpg":1.526,"img/p-alangulo.jpg":0.715,"img/p-anfibio.jpg":1.333,"img/p-branding.jpg":1.333,"img/p-cima.jpg":1.73,"img/p-didier.jpg":1.0,"img/p-flores.jpg":0.715,"img/p-industria.jpg":1.0,"img/p-lux.jpg":0.715,"img/p-miguel.jpg":1.0,"img/p-polo.jpg":0.828,"img/p-pulso.jpg":0.804,"img/p-tinta.jpg":0.698}; // proporciones conocidas; las fotos nuevas se miden al cargar
+
+// ---------- datos: se leen de data/obras.json (lo edita el panel /admin) ----------
+const O = [], P = [], ROOMS = {o:O, p:P};
+const rel = p => String(p||'').trim().replace(/^\/+/, '');
+const sz = it => { const [a,b]=String(it.size||'50×50').split(/[×x]/i).map(Number); return Math.max(a||50,b||50)*1000+(a||50)*(b||50)/100; };
+const loadData = () => fetch('data/obras.json', {cache:'no-cache'}).then(r=>r.json()).then(d=>{
+  O.length = 0; P.length = 0;
+  const og = d.originales||[];
+  og.forEach((x,i)=>{ const pn = !!x.par_con_siguiente && i < og.length-1, pp = i>0 && !!og[i-1].par_con_siguiente;
+    O.push({id:'o'+(i+1), kind:'o', title:x.titulo||'Sin título', f:rel(x.foto), size:String(x.medida||'').replace(/x/i,'×'), tech:x.tecnica||'', year:String(x.anio||''),
+      pairNext:pn, pair:pn||pp, opts:[{l:x.metal?'Original sobre lienzo (también sobre metal, a consultar)':'Original enmarcado', usd:+x.precio||0}]}); });
+  (d.prints||[]).forEach((x,i)=>{ const opts = (x.opciones||[]).map(o=>({l:o.nombre||'Opción', usd:+o.precio_usd||0, ars:+o.extra_ars||0}));
+    if(!opts.length) opts.push({l:'Print', usd:0});
+    P.push({id:'p'+(i+1), kind:'p', title:x.titulo||'Sin título', f:rel(x.foto), ff:rel(x.foto_con_marco), size:String(x.medida||'50×50').replace(/x/i,'×'), tech:x.tecnica||'',
+      g:x.tipo==='serigrafia'?'ser':'lz', opts, sel:opts.length-1, scale:+x.escala||1}); });
+  P.sort((x,y)=>sz(x)-sz(y)); // la sala de prints va siempre in crescendo, de la más chica a la más grande
+});
+
+const usd = v => 'USD '+v.toLocaleString('es-AR');
+const ars = v => 'ARS '+v.toLocaleString('es-AR');
+const optP = o => o.usd ? usd(o.usd)+(o.ars?' + '+ars(o.ars):'') : 'Consultar precio';
+const minP = it => { const v=it.opts.map(o=>o.usd).filter(Boolean); return v.length?Math.min(...v):0; };
+const range = arr => { const v=arr.map(minP).filter(Boolean); return usd(Math.min(...v))+' a '+usd(Math.max(...arr.map(i=>Math.max(...i.opts.map(o=>o.usd))))).replace('USD ',''); };
+const sizeTxt = s => s ? s.replace('×',' × ')+' cm' : 'Medida a consultar';
+const esc = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const $ = s => document.querySelector(s);
+
+// ---------- 3D room ----------
+const U = 600;            // px per metre (alto para que las obras se vean nítidas)
+const R = 22;             // radius of the curved wall (m)
+let RC = R - 3.1;         // walking line (set per room)
+const LOOK = 0.92;        // cuánto gira la mirada hacia la pared (rad). Antes: 0.62 (más en perspectiva)
+const EYE = 1.6, HANG = 1.55;
+const world = $('#world'), view = $('#view');
+const GAPX = 0.55; // separación entre cuadros de un par (m); entre pares y entre prints es 3X
+const DRAG = 0.0065; // sensibilidad al arrastrar con el dedo o el mouse (antes 0.012)
+const FAR = innerWidth < 640 ? 0.9 : 1.25;
+let pmode = '', SL = [];
+const foc = {i:-1, f:0, t:0, a:0, d:3};
+let room = null, items = [], els = [], stops = [], phi = 0, target = 0, persp = 900;
+
+// angle offset between the walker and the point on the wall straight ahead of the eye
+const calcAhead = () => { const dx=Math.cos(LOOK), dz=Math.sin(LOOK);
+  const b = 2*RC*dz, c = RC*RC-R*R, t = (-b+Math.sqrt(b*b-4*c))/2; return Math.atan2(t*dx, RC+t*dz); };
+let ahead = calcAhead();
+
+// profundidad del marco (3,5 cm) y color del canto según formato
+const depthVars = it => { const framed = it.sel===1;
+  if(it.g==='ser') return framed ? `--d:14px;--o:0px;--side:linear-gradient(90deg,#c9c5bf,#dedad4)` : '--d:4px;--o:0px;--side:#e8e3da';
+  return framed ? '--d:28px;--o:-7px;--side:linear-gradient(90deg,#8e6a3c,#ad8650)' : '--d:14px;--o:0px;--side:#ddd5c8'; };
+const imgOf = it => (it.g==='ser' && it.sel===1 && it.ff) ? it.ff : it.f;
+const dims = it => {
+  const [a,b] = (it.size||'100×100').split('×').map(Number); const L = (it.kind==='p' ? 0.9 + (Math.max(a,b)/100-0.5)*1.25 : Math.max(a,b)/100) * (it.scale||1), r = AR[imgOf(it)]||AR[it.f]||1;
+  return r>=1 ? [L, L/r] : [L*r, L];
+};
+const place = (el, x, y, z, ry, rx) => { el.style.transform = `translate3d(${x*U}px,${-y*U}px,${z*U}px) rotateY(${ry}rad)` + (rx?` rotateX(${rx}rad)`:''); };
+const facing = th => Math.atan2(-Math.cos(th), -Math.sin(th));
+
+const build = kind => {
+  room = kind; items = ROOMS[kind]; RC = R-3.1; ahead = calcAhead(); world.innerHTML = ''; els = []; stops = [];
+  let s = 3;
+  const slots = [];
+  items.forEach((it,i) => {
+    // ritmo de colgado: entre los dos cuadros de un par hay X; entre un par y el siguiente, 2X
+    const together = i>0 && kind==='o' && items[i-1].pairNext;
+    const [w,h] = dims(it); const gap = i===0 ? 0 : kind==='p' ? 3*GAPX : (together ? GAPX : 3*GAPX); // pares a X, entre pares 3X; prints parejos a 3X
+    s += gap + w/2; slots.push({it, w, h, s}); s += w/2;
+  });
+  const total = s + 3;
+  SL = slots.map(o=>({th:o.s/R, w:o.w, h:o.h}));
+  slots.forEach(({it,w,h,s},i) => {
+    const th = s/R, el = document.createElement('div');
+    el.className = 'slot'; el.dataset.i = i;
+    const fr = it.kind==='p' ? ` ${it.g}${it.sel===1?' fr':''} p3d` : '';
+    const showLab = false; // sin etiqueta en la pared: la info va solo en el pie de pantalla
+    const lab = showLab ? (it.pair && it.kind==='o'
+      ? `<div class="lab" style="margin-top:${Math.max(0,h*U-120)}px"><b>${esc(items[i-1].title)} y ${esc(it.title.replace('Original ',''))}</b>${esc(it.tech)}, ${esc(it.year)}<br>${sizeTxt(it.size)} c/u<span class="p">${optP(it.opts[0])} c/u</span></div>`
+      : `<div class="lab" style="margin-top:${Math.max(0,h*U-120)}px"><b>${esc(it.title)}</b>${esc(it.tech)}${it.year?', '+esc(it.year):''}<br>${sizeTxt(it.size)}<span class="p">${it.kind==='p'?'desde '+usd(minP(it)):optP(it.opts[0])}</span></div>`) : '';
+    el.innerHTML = `<div class="art${fr}" style="width:${w*U}px;height:${h*U}px;${it.kind==='p'?depthVars(it):''}"><img src="${imgOf(it)}" alt="${esc(it.title)}" draggable="false" decoding="sync"></div>${lab}`;
+    el.style.marginLeft = (-(w*U)/2) + 'px'; el.style.marginTop = (-(h*U)/2) + 'px'; el.style.transformOrigin = `${w*U/2}px ${h*U/2}px`;
+    world.appendChild(el);
+    place(el, (R-0.02)*Math.cos(th), HANG, (R-0.02)*Math.sin(th), facing(th));
+    els.push({el, th, slot:true, x:(R-0.02)*Math.cos(th), z:(R-0.02)*Math.sin(th), hw:w/2}); stops.push(th - ahead);
+  });
+  // floor shadow, base line and ceiling line, one metre at a time
+  const SEG = 3; // tramos de pared de 3 m: menos capas, más fluido en el celu
+  for(let m=-6; m<total+12; m+=SEG){
+    const th=(m+SEG/2)/R, x=Math.cos(th), z=Math.sin(th), f=facing(th);
+    const ln=document.createElement('div'); ln.className='ln'; ln.style.width=(U*SEG*1.04)+'px'; ln.style.marginLeft=(-U*SEG*0.52)+'px';
+    world.appendChild(ln); place(ln, (R-0.01)*x, 0.02, (R-0.01)*z, f); els.push({el:ln, th});
+    const cl=document.createElement('div'); cl.className='cl'; cl.style.width=(U*SEG*1.04)+'px'; cl.style.marginLeft=(-U*SEG*0.52)+'px';
+    world.appendChild(cl); place(cl, (R-0.01)*x, 3.4, (R-0.01)*z, f); els.push({el:cl, th});
+  }
+  phi = target = stops.length ? stops[0] : 0; // arranca de frente a la primera obra
+  document.querySelectorAll('.rooms button').forEach(b=>b.setAttribute('aria-current', b.dataset.room===kind));
+  try{ location.hash = kind==='o'?'originales':'prints'; }catch(e){}
+  frame(true);
+};
+
+const resize = () => { persp = Math.max(560, Math.min(1000, innerWidth*0.7, innerHeight*1.12)) /* tamaño según ancho y alto: en pantallas apaisadas no se agranda de más */; view.style.perspective = persp+'px'; frame(true); };
+let last = -1, raf = 0;
+const frame = force => {
+  // foc.f: 0 = caminando, 1 = parado de frente a la obra abierta en la ficha
+  const ff = foc.f, ee = ff*ff*(3-2*ff);
+  const pa = phi*(1-ee) + foc.a*ee, rr = RC*(1-ee) + (R-foc.d)*ee, LK = LOOK*(1-ee) + (Math.PI/2)*ee;
+  const cx = rr*Math.cos(pa), cz = rr*Math.sin(pa);
+  const tx = -Math.sin(pa), tz = Math.cos(pa), nx = Math.cos(pa), nz = Math.sin(pa);
+  const fx = tx*Math.cos(LK)+nx*Math.sin(LK), fz = tz*Math.cos(LK)+nz*Math.sin(LK);
+  const beta = Math.atan2(fx, -fz);
+  world.style.transform = `translateZ(${persp}px) rotateY(${beta}rad) translate3d(${-cx*U}px,${EYE*U}px,${-cz*U}px)`;
+  for(const e of els){
+    const d = e.th - phi; const show = (e.slot ? ((e.x-cx)*fx + (e.z-cz)*fz) > 0.35 : d > -0.12) && d < FAR; // los cuadros se ven hasta salir de cuadro
+    if(e.vis !== show){ e.el.style.visibility = show ? 'visible' : 'hidden'; e.vis = show; }
+    if(show && e.el.className==='slot'){ const o = d < 0.5 ? 1 : Math.max(0.15, Math.min(1, 1 - (d-0.5)*1.1)); if(Math.abs((e.o||0)-o)>0.02 || (o===1 && e.o!==1)){ e.el.style.opacity = o===1 ? '' : o; e.o=o; } } // sin opacidad en las cercanas: así conservan el 3D del marco
+  }
+  // nearest piece
+  let best = 0; stops.forEach((s,i)=>{ if(Math.abs(s-phi) < Math.abs(stops[best]-phi)) best=i; });
+  if(best!==last || force){ last = best; caption(best); }
+  $('#prog').style.width = (100*(phi-stops[0]+2.2/RC)/(stops[stops.length-1]-stops[0]+4.4/RC))+'%';
+};
+const focusGoal = () => { const s = SL[foc.i]; if(!s) return [foc.a, foc.d];
+  const vw = innerWidth > 640 ? innerWidth - 440 : innerWidth, vh = innerHeight;
+  const d = Math.max(s.h*persp/(0.56*vh), s.w*persp/(0.72*vw), 1.1); return [s.th, Math.min(d, R-1)]; };
+const loop = () => {
+  const d = target - phi; const [ga, gd] = focusGoal();
+  const busy = Math.abs(d) > 0.0002 || Math.abs(foc.t-foc.f) > 0.002 || (foc.f > 0 && (Math.abs(ga-foc.a) > 0.0002 || Math.abs(gd-foc.d) > 0.002));
+  if(!busy){ phi = target; foc.f = foc.t; frame(); raf = 0; return; }
+  phi += d*(drag ? 0.4 : 0.1);
+  foc.f += Math.sign(foc.t-foc.f)*Math.min(Math.abs(foc.t-foc.f), 0.045);
+  foc.a += (ga-foc.a)*0.12; foc.d += (gd-foc.d)*0.12;
+  frame(); raf = requestAnimationFrame(loop); };
+const kick = () => { if(!raf) raf = requestAnimationFrame(loop); };
+const go = t => { const lo = stops[0]-2.2/RC, hi = stops[stops.length-1]+1.2/RC; target = Math.max(lo, Math.min(hi, t)); hideHint();
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){ phi = target; frame(); return; } if(!raf) raf = requestAnimationFrame(loop); };
+const step = dir => { const i = Math.max(0, Math.min(stops.length-1, last + dir)); go(stops[i]); };
+
+const caption = i => {
+  if(pmode==='item' && panelOpen() && items[i] && cur !== items[i]){ cur = items[i]; drawItem(); if(MACRO) setMacro(cur); else if(FACE){ foc.i = i; kick(); } } // la ficha sigue a la obra
+  const it = items[i]; if(!it) return;
+  $('#ct').textContent = it.title; $('#ct').hidden = false;
+  $('#cm').innerHTML = `${sizeTxt(it.size)} · <strong>${it.kind==='p'?'desde '+usd(minP(it)):optP(it.opts[0])}</strong>`;
+  $('#prev').disabled = i===0;
+  $('#next').disabled = i===items.length-1;
+};
+let hinted = false; const hideHint = () => { if(!hinted){ hinted = true; $('#hint').style.opacity = 0; } };
+
+// walking input
+view.addEventListener('wheel', e => { e.preventDefault(); go(target + (e.deltaY + e.deltaX) * 0.0016/RC*1.6); }, {passive:false});
+let drag = null;
+view.addEventListener('pointerdown', e => { e.preventDefault(); drag = {x:e.clientX, y:e.clientY, t:target, moved:0, v:0, lt:performance.now(), lm:0}; view.classList.add('drag'); });
+addEventListener('pointermove', e => { if(!drag) return; const dx = e.clientX-drag.x, dy = e.clientY-drag.y; const m = Math.abs(dx)>Math.abs(dy)?-dx:-dy; drag.moved = Math.max(drag.moved, Math.abs(m)); const now = performance.now(), dt = Math.max(8, now-drag.lt); drag.v = 0.7*drag.v + 0.3*(m-drag.lm)/dt; drag.lt = now; drag.lm = m; go(drag.t + m*DRAG/RC); });
+addEventListener('pointerup', e => { view.classList.remove('drag'); if(drag && drag.moved >= 6 && performance.now()-drag.lt < 80){ const d = drag; drag = null; go(target + d.v*150*DRAG/RC); } if(drag && drag.moved < 6){ const s = e.target.closest && e.target.closest('.slot'); if(s) openItem(+s.dataset.i); } drag = null; });
+// "Todas las obras" se cierra tocando afuera del panel
+addEventListener('pointerdown', e => { if(pmode==='index' && panelOpen() && !panel.contains(e.target) && !e.target.closest('.menu')){ closePanel(); e.stopPropagation(); } }, true);
+addEventListener('pointercancel', () => { drag = null; view.classList.remove('drag'); });
+addEventListener('keydown', e => { if((!panelOpen() || pmode==='item')){ if(e.key==='ArrowRight'||e.key==='ArrowDown'){ e.preventDefault(); step(1); } if(e.key==='ArrowLeft'||e.key==='ArrowUp'){ e.preventDefault(); step(-1); } } if(e.key==='Escape') closePanel(); });
+
+// ---------- selection & panel ----------
+let sel = []; try{ sel = JSON.parse(localStorage.getItem('aq-sel2')||'[]'); }catch(e){}
+const save = () => { try{ localStorage.setItem('aq-sel2', JSON.stringify(sel)); }catch(e){} };
+const toast = m => { const t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(toast.h); toast.h=setTimeout(()=>t.classList.remove('on'),2000); };
+const msg = rows => '¡Hola Valentín! Me gustó mucho esta obra y estoy interesado en adquirirla. ¿Cómo podríamos avanzar?\n\n'+rows.map(r=>`${r.title} · ${r.size} · ${r.opt} · ${r.price}`).join('\n');
+const wa = t => `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(t)}`;
+const panel = $('#panel'); const panelOpen = () => panel.classList.contains('on');
+const closePanel = () => { panel.classList.remove('on'); document.body.classList.remove('pop'); view.classList.remove('focus'); $('#macro').classList.remove('on'); document.body.classList.remove('macro'); if(foc.t){ foc.t = 0; kick(); } };
+let cur = null;
+const rowOf = it => { const o = it.opts[it.kind==='p'?it.sel:0]; return {id:it.id+'-'+(it.sel||0), title:it.title, f:it.f, size:sizeTxt(it.size), opt:o.l, usd:o.usd, ars:o.ars||0, price:optP(o)}; };
+const drawItem = () => { requestAnimationFrame(()=>{ panel.scrollTop = 0; });
+  const it = cur, o = it.opts[it.kind==='p'?it.sel:0];
+  const opts = it.kind==='p' ? it.opts.map((x,j)=>`<button class="opt" data-o="${j}" aria-pressed="${j===it.sel}"><span>${esc(x.l)}</span><strong>${optP(x)}</strong></button>`).join('') : `<p class="note">${esc(o.l)}</p>`;
+  const other = room==='o' ? ['p','Recorré también la sala de prints.','Ir a Prints'] : ['o','Conocé las piezas únicas.','Ir a Originales'];
+  panel.innerHTML = `<div class="im">${it.kind==='p' ? `<div class="pv ${it.g}${it.sel===1?' fr':''}" style="aspect-ratio:${AR[imgOf(it)]||1};width:min(100%, calc(32vh * ${AR[imgOf(it)]||1}))"><img src="${imgOf(it)}" alt="${esc(it.title)}"></div>` : `<img src="${imgOf(it)}" alt="${esc(it.title)}">`}</div><div class="pin"><button class="x" data-close aria-label="Cerrar" style="margin:-8px -10px -14px 0">×</button>
+    <h2>${esc(it.title)}</h2><dl class="spec"><dt>Medida</dt><dd>${sizeTxt(it.size)}</dd><dt>Técnica</dt><dd>${esc(it.tech)}</dd>${it.year?`<dt>Año</dt><dd>${esc(it.year)}</dd>`:''}</dl>
+    <div>${opts}</div><div class="price">${optP(o)}</div>
+    <p class="note">${it.kind==='o'?'Llega con certificado, embastido y con marco flotante de madera, listo para colgar.':'Se produce a pedido y llega en 10 a 12 días. Se puede adaptar la medida.'}</p>
+    <div class="btns"><a class="btn k" target="_blank" rel="noopener" href="${wa(msg([rowOf(it)]))}">Consultar</a></div>
+    <div class="bridge">${other[1]} <button data-room="${other[0]}">${other[2]}</button></div></div>`;
+};
+const MACRO = false, FACE = false; // vistas alternativas al abrir una obra (macro / de frente), apagadas
+const setMacro = it => { const m = $('#macro .mi'); m.style.backgroundImage = `url("${imgOf(it)}")`; };
+const openItem = i => { pmode = 'item'; cur = items[i]; go(stops[i]); drawItem(); panel.classList.add('on');
+  document.body.classList.add('pop'); // la galería queda de fondo tal cual, la ficha sigue a la obra
+  if(MACRO){ setMacro(cur); $('#macro').classList.add('on'); document.body.classList.add('macro'); return; }
+  if(FACE){ if(foc.f === 0){ foc.a = SL[i] ? SL[i].th - 0.02 : phi; foc.d = R - RC; } foc.i = i; foc.t = 1; view.classList.add('focus'); kick(); } };
+const drawBag = () => {
+  const tot = sel.reduce((a,r)=>a+(r.usd||0),0), ta = sel.reduce((a,r)=>a+(r.ars||0),0);
+  panel.innerHTML = `<div class="pin"><button class="x" data-close aria-label="Cerrar">×</button><h2>Tu selección</h2>${sel.length ? sel.map((r,i)=>`<div class="row"><img src="img/${r.f}" alt=""><div><strong>${esc(r.title)}</strong><small>${esc(r.opt)} · ${esc(r.size)}</small></div><div style="text-align:right"><strong style="white-space:nowrap">${esc(r.price)}</strong><br><button data-rm="${i}">Quitar</button></div></div>`).join('')
+    + `<div style="display:flex;justify-content:space-between;font-weight:700;font-size:18px"><span>Total estimado</span><span>${usd(tot)}${ta?' + '+ars(ta):''}</span></div><p class="note">Te respondemos con disponibilidad, envío y formas de pago.</p><div class="btns"><a class="btn k" target="_blank" rel="noopener" href="${wa(msg(sel))}">Enviar consulta por WhatsApp</a><button class="btn l" id="copy">Copiar</button></div>`
+    : '<p class="note">Todavía no agregaste obras. Tocá una obra en la pared para ver sus opciones.</p>'}</div>`;
+};
+// íconos de orden en SVG (los caracteres ↑ ↓ ↕ se ven como emoji en el celu)
+const SI = d => `<svg width="12" height="14" viewBox="0 0 12 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
+const SORTICON = {hang:SI('M3 5l3-3 3 3M3 9l3 3 3-3'), asc:SI('M6 13V1M2 5l4-4 4 4'), desc:SI('M6 1v12M2 9l4 4 4-4')};
+let sort = 'hang';
+let idxRoom = 'o';
+const drawIndex = () => { pmode = 'index';
+  const its = ROOMS[idxRoom];
+  let list = its.map((it,i)=>({it,i}));
+  if(sort!=='hang') list.sort((a,b)=>((minP(a.it)||1e9)-(minP(b.it)||1e9))*(sort==='asc'?1:-1));
+  panel.innerHTML = `<div class="pin"><button class="x" data-close aria-label="Cerrar">×</button><div class="itabs" role="tablist">${[['o','Originales'],['p','Prints']].map(([k,l])=>`<button role="tab" data-itab="${k}" aria-selected="${idxRoom===k}">${l}</button>`).join('')}</div>
+    <div class="sorts"><button data-sort="1" aria-pressed="${sort!=='hang'}" aria-label="Ordenar por precio">Precio <span class="arw">${SORTICON[sort]}</span></button></div>
+    <div class="grid">${list.map(({it,i})=>`<button data-go="${i}"><div class="th"><img src="${it.f}" alt="" loading="lazy"></div>${esc(it.title)}<small>${it.kind==='p'?'desde '+usd(minP(it)):optP(it.opts[0])}</small></button>`).join('')}</div></div>`;
+};
+
+// ---------- lobby ----------
+const door = (el, fs) => { el.innerHTML = fs.map((f,i)=>`<img src="img/${f}" alt="" style="width:${[30,40,26][i]}%;left:${[8,34,68][i]}%;top:${[34,26,38][i]}%">`).join(''); };
+// precarga: todas las obras de las dos salas quedan descargadas y decodificadas en memoria,
+// así al cambiar de sala los cuadros aparecen ya cargados
+const CACHE = {};
+const preload = f => { if(!f) return Promise.resolve(); if(!CACHE[f]){ const im = new Image(); im.src = f;
+  CACHE[f] = (im.decode ? im.decode() : new Promise((ok,ko)=>{ im.onload=ok; im.onerror=ko; })).then(()=>{ if(im.naturalHeight) AR[f] = im.naturalWidth/im.naturalHeight; }).catch(()=>{}); } return CACHE[f]; };
+const roomFiles = k => { const fs = []; ROOMS[k].forEach(it=>{ fs.push(it.f); if(it.ff) fs.push(it.ff); }); return fs.filter(Boolean); };
+let entering = 0;
+const enter = kind => { closePanel(); const my = ++entering;
+  const fs = roomFiles(kind);
+  Promise.race([Promise.all(fs.map(preload)), new Promise(r=>setTimeout(r,2500))]).then(()=>{ if(my===entering) build(kind); }); };
+const warm = () => ['o','p'].forEach(k=>roomFiles(k).forEach(preload));
+const toLobby = () => enter('o'); // el logo vuelve a la primera obra de Originales
+
+document.addEventListener('click', e => {
+  if(!e.target.closest('.menu')) $('#drop').hidden = true;
+  const t = e.target.closest('button,a'); if(!t) return;
+  if(t.dataset.room){ enter(t.dataset.room); }
+  else if(t.id==='home') toLobby();
+  else if(t.id==='prev') step(-1);
+  else if(t.id==='next') step(1);
+  else if(t.id==='see') openItem(last);
+  else if(t.id==='bag'){ drawBag(); panel.classList.add('on'); }
+  else if(t.id==='burger'){ const d=$('#drop'); d.hidden=!d.hidden; t.setAttribute('aria-expanded', !d.hidden); return; }
+  else if(t.id==='home2'){ $('#drop').hidden=true; toLobby(); }
+  else if(t.hasAttribute('data-idx')){ $('#drop').hidden=true; idxRoom = room; drawIndex(); panel.classList.add('on'); }
+  else if(t.dataset.sort){ sort = sort==='hang' ? 'asc' : sort==='asc' ? 'desc' : 'hang'; drawIndex(); }
+  else if(t.dataset.itab){ idxRoom = t.dataset.itab; drawIndex(); panel.scrollTop = 0; }
+  else if(t.dataset.go){ closePanel(); if(idxRoom !== room) build(idxRoom); go(stops[+t.dataset.go]); }
+  else if(t.dataset.o){ cur.sel = +t.dataset.o; drawItem(); const s = els.find(x=>x.el.dataset && +x.el.dataset.i===items.indexOf(cur)); if(s){ const ae = s.el.querySelector('.art'); ae.classList.toggle('fr', cur.sel===1); depthVars(cur).split(';').forEach(kv=>{ const [k,v]=kv.split(':'); ae.style.setProperty(k, v); }); s.el.querySelector('img').src = imgOf(cur); } if(MACRO) setMacro(cur); }
+  else if(t.id==='add'){ const r = rowOf(cur); if(!sel.some(x=>x.id===r.id)){ sel.push(r); save(); } toast(cur.title+' agregada'); }
+  else if(t.dataset.rm){ sel.splice(+t.dataset.rm,1); save(); drawBag(); }
+  else if(t.id==='copy'){ navigator.clipboard?.writeText(msg(sel)).then(()=>toast('Consulta copiada'),()=>toast('No se pudo copiar')); }
+  else if(t.hasAttribute('data-close')) closePanel();
+});
+addEventListener('resize', resize);
+save(); resize();
+// carga inicial: la sala vacía aparece al instante; se leen los datos, se precargan las obras y el logo se va llenando
+{ const ld = $('#load'), lg = ld.querySelector('.lg');
+  const first = location.hash.slice(1)==='prints' ? 'p' : 'o';
+  const start = performance.now();
+  build(first); // solo las líneas de la sala mientras carga
+  const finish = () => { lg.style.setProperty('--p','100%');
+    setTimeout(()=>{ ld.classList.add('done'); document.body.classList.remove('loading'); }, Math.max(350, 900-(performance.now()-start))); };
+  loadData().then(()=>{
+    const all = [...new Set(roomFiles(first))]; let n = 0;
+    all.forEach(f => preload(f).then(()=>{ n++; lg.style.setProperty('--p', Math.round(100*n/all.length)+'%'); }));
+    return Promise.race([Promise.all(all.map(preload)), new Promise(r=>setTimeout(r,12000))]);
+  }).then(()=>{ build(first); requestAnimationFrame(finish); warm(); })
+    .catch(err=>{ console.error(err); $('#load .lg').insertAdjacentHTML('afterend','<p style="position:absolute;top:58%;font-size:14px;color:#77736d">No se pudieron cargar las obras.</p>'); }); }
+}
+</script>
+</body>
+</html>

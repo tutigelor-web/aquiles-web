@@ -1,0 +1,665 @@
+{
+  "originales": [
+    {
+      "titulo": "Neo",
+      "foto": "/img/o-002-0.jpg",
+      "medida": "130×100",
+      "tecnica": "Óleo, pastel al óleo y pintura sintética",
+      "anio": "2026",
+      "precio": 1200,
+      "metal": true,
+      "par_con_siguiente": true
+    },
+    {
+      "titulo": "El Olímpico",
+      "foto": "/img/o-002-1.jpg",
+      "medida": "130×100",
+      "tecnica": "Óleo, pastel al óleo y pintura sintética",
+      "anio": "2026",
+      "precio": 1200,
+      "metal": true,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Estructura",
+      "foto": "/img/o-003-0.jpg",
+      "medida": "130×100",
+      "tecnica": "Óleo, pastel al óleo y pintura sintética",
+      "anio": "2026",
+      "precio": 1200,
+      "metal": true,
+      "par_con_siguiente": true
+    },
+    {
+      "titulo": "Vegetación",
+      "foto": "/img/o-003-1.jpg",
+      "medida": "130×100",
+      "tecnica": "Óleo, pastel al óleo y pintura sintética",
+      "anio": "2026",
+      "precio": 1200,
+      "metal": true,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Ciclos",
+      "foto": "/img/o-004-0.jpg",
+      "medida": "130×100",
+      "tecnica": "Óleo, pastel al óleo y pintura sintética",
+      "anio": "2026",
+      "precio": 1200,
+      "metal": true,
+      "par_con_siguiente": true
+    },
+    {
+      "titulo": "Club Unión",
+      "foto": "/img/o-004-1.jpg",
+      "medida": "130×100",
+      "tecnica": "Óleo, pastel al óleo y pintura sintética",
+      "anio": "2026",
+      "precio": 1200,
+      "metal": true,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Cenital",
+      "foto": "/img/o-005-0.jpg",
+      "medida": "130×100",
+      "tecnica": "Óleo, pastel al óleo y pintura sintética",
+      "anio": "2026",
+      "precio": 1200,
+      "metal": true,
+      "par_con_siguiente": true
+    },
+    {
+      "titulo": "Paciencia",
+      "foto": "/img/o-005-1.jpg",
+      "medida": "130×100",
+      "tecnica": "Óleo, pastel al óleo y pintura sintética",
+      "anio": "2026",
+      "precio": 1200,
+      "metal": true,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Cuenco",
+      "foto": "/img/o-006-0.jpg",
+      "medida": "130×100",
+      "tecnica": "Óleo y pastel al óleo",
+      "anio": "2026",
+      "precio": 1400,
+      "metal": true,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Ki",
+      "foto": "/img/o-007-0.jpg",
+      "medida": "160×100",
+      "tecnica": "Óleo y pastel al óleo",
+      "anio": "2026",
+      "precio": 1500,
+      "metal": false,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Estracto",
+      "foto": "/img/o-008-0.jpg",
+      "medida": "160×100",
+      "tecnica": "Óleo y pastel al óleo",
+      "anio": "2026",
+      "precio": 1300,
+      "metal": false,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Mano a mano",
+      "foto": "/img/o-009-0.jpg",
+      "medida": "130×100",
+      "tecnica": "Óleo y pastel al óleo",
+      "anio": "2026",
+      "precio": 900,
+      "metal": false,
+      "par_con_siguiente": true
+    },
+    {
+      "titulo": "Fuente",
+      "foto": "/img/o-009-1.jpg",
+      "medida": "130×100",
+      "tecnica": "Óleo y pastel al óleo",
+      "anio": "2026",
+      "precio": 900,
+      "metal": false,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Handicap",
+      "foto": "/img/o-010-0.jpg",
+      "medida": "160×100",
+      "tecnica": "Óleo y pastel al óleo",
+      "anio": "2026",
+      "precio": 1500,
+      "metal": false,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Alerta",
+      "foto": "/img/o-011-0.jpg",
+      "medida": "160×100",
+      "tecnica": "Óleo y pastel al óleo",
+      "anio": "2026",
+      "precio": 1400,
+      "metal": false,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Hilvanar",
+      "foto": "/img/o-012-0.jpg",
+      "medida": "160×100",
+      "tecnica": "Óleo y pastel al óleo",
+      "anio": "2026",
+      "precio": 1400,
+      "metal": false,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Nave Espacial",
+      "foto": "/img/o-013-0.jpg",
+      "medida": "90×100",
+      "tecnica": "Óleo y pastel al óleo",
+      "anio": "2026 / 2022",
+      "precio": 1400,
+      "metal": false,
+      "par_con_siguiente": true
+    },
+    {
+      "titulo": "Amazonas",
+      "foto": "/img/o-013-1.jpg",
+      "medida": "90×100",
+      "tecnica": "Óleo y pastel al óleo",
+      "anio": "2026 / 2022",
+      "precio": 1400,
+      "metal": false,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Cordel",
+      "foto": "/img/o-014-0.jpg",
+      "medida": "160×100",
+      "tecnica": "Óleo y pastel al óleo",
+      "anio": "2026",
+      "precio": 1500,
+      "metal": false,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Temperaturas",
+      "foto": "/img/o-015-0.jpg",
+      "medida": "150×150",
+      "tecnica": "Óleo y pastel al óleo",
+      "anio": "2026",
+      "precio": 1900,
+      "metal": false,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Trazos",
+      "foto": "/img/o-016-0.jpg",
+      "medida": "",
+      "tecnica": "Óleo y pastel al óleo",
+      "anio": "2026",
+      "precio": 1300,
+      "metal": false,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "ADN",
+      "foto": "/img/o-017-0.jpg",
+      "medida": "160×100",
+      "tecnica": "Óleo y pastel al óleo",
+      "anio": "2026",
+      "precio": 1700,
+      "metal": false,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Mapa",
+      "foto": "/img/o-018-0.jpg",
+      "medida": "160×100",
+      "tecnica": "Óleo y pastel al óleo",
+      "anio": "2026",
+      "precio": 1500,
+      "metal": false,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Lago Escondido",
+      "foto": "/img/o-019-0.jpg",
+      "medida": "160×100",
+      "tecnica": "Óleo y pastel al óleo",
+      "anio": "2026",
+      "precio": 1300,
+      "metal": false,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "5 pm",
+      "foto": "/img/o-020-0.jpg",
+      "medida": "170×110",
+      "tecnica": "Óleo y pastel al óleo",
+      "anio": "2026",
+      "precio": 1500,
+      "metal": false,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Will Hot",
+      "foto": "/img/o-021-0.jpg",
+      "medida": "170×110",
+      "tecnica": "Óleo y pastel al óleo sobre lienzo crudo",
+      "anio": "2026",
+      "precio": 1500,
+      "metal": false,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Secuencia",
+      "foto": "/img/o-022-0.jpg",
+      "medida": "100×90",
+      "tecnica": "Óleo, pastel al óleo y aerosol",
+      "anio": "2026",
+      "precio": 1500,
+      "metal": false,
+      "par_con_siguiente": true
+    },
+    {
+      "titulo": "Tup",
+      "foto": "/img/o-022-1.jpg",
+      "medida": "100×90",
+      "tecnica": "Óleo, pastel al óleo y aerosol",
+      "anio": "2026",
+      "precio": 1500,
+      "metal": false,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Medianeras",
+      "foto": "/img/o-023-0.jpg",
+      "medida": "170×110",
+      "tecnica": "Óleo y pastel al óleo sobre lienzo crudo",
+      "anio": "2026",
+      "precio": 1500,
+      "metal": false,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Penales",
+      "foto": "/img/o-024-a.jpg",
+      "medida": "180×110",
+      "tecnica": "Pastel al óleo sobre lienzo crudo",
+      "anio": "2026",
+      "precio": 1200,
+      "metal": false,
+      "par_con_siguiente": true
+    },
+    {
+      "titulo": "Galgo",
+      "foto": "/img/o-024-0.jpg",
+      "medida": "180×110",
+      "tecnica": "Pastel al óleo sobre lienzo crudo",
+      "anio": "2026",
+      "precio": 1200,
+      "metal": false,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Temperatura II",
+      "foto": "/img/o-025-0.jpg",
+      "medida": "170×110",
+      "tecnica": "Óleo y pastel al óleo sobre lienzo crudo",
+      "anio": "2026",
+      "precio": 1500,
+      "metal": false,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Reflejos",
+      "foto": "/img/o-026-0.jpg",
+      "medida": "100×90",
+      "tecnica": "Óleo, pastel al óleo y aerosol",
+      "anio": "2026",
+      "precio": 1200,
+      "metal": false,
+      "par_con_siguiente": true
+    },
+    {
+      "titulo": "Pato",
+      "foto": "/img/o-026-1.jpg",
+      "medida": "100×90",
+      "tecnica": "Óleo, pastel al óleo y aerosol",
+      "anio": "2026",
+      "precio": 1200,
+      "metal": false,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Fuente II",
+      "foto": "/img/o-027-0.jpg",
+      "medida": "100×130",
+      "tecnica": "Óleo, pastel al óleo y aerosol sobre lienzo crudo",
+      "anio": "2026",
+      "precio": 1300,
+      "metal": false,
+      "par_con_siguiente": true
+    },
+    {
+      "titulo": "Fuente III",
+      "foto": "/img/o-027-1.jpg",
+      "medida": "100×130",
+      "tecnica": "Óleo, pastel al óleo y aerosol sobre lienzo crudo",
+      "anio": "2026",
+      "precio": 1300,
+      "metal": false,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Amazonas II",
+      "foto": "/img/o-028-0.jpg",
+      "medida": "100×130",
+      "tecnica": "Óleo, pastel al óleo y aerosol",
+      "anio": "2026",
+      "precio": 1500,
+      "metal": false,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Amazonas III",
+      "foto": "/img/o-029-0.jpg",
+      "medida": "100×130",
+      "tecnica": "Óleo, pastel al óleo y aerosol",
+      "anio": "2026",
+      "precio": 1500,
+      "metal": false,
+      "par_con_siguiente": false
+    }
+  ],
+  "prints": [
+    {
+      "titulo": "Didier",
+      "tipo": "lienzo",
+      "foto": "/img/p-didier.jpg",
+      "medida": "50×50",
+      "tecnica": "Impresión a 12 tintas sobre lienzo",
+      "opciones": [
+        {
+          "nombre": "Lienzo",
+          "precio_usd": 80
+        },
+        {
+          "nombre": "Lienzo enmarcado en madera",
+          "precio_usd": 100
+        }
+      ]
+    },
+    {
+      "titulo": "Industria",
+      "tipo": "lienzo",
+      "foto": "/img/p-industria.jpg",
+      "medida": "60×50",
+      "tecnica": "Impresión a 12 tintas sobre lienzo",
+      "opciones": [
+        {
+          "nombre": "Lienzo",
+          "precio_usd": 80
+        },
+        {
+          "nombre": "Lienzo enmarcado en madera",
+          "precio_usd": 100
+        }
+      ]
+    },
+    {
+      "titulo": "Miguel",
+      "tipo": "lienzo",
+      "foto": "/img/p-miguel.jpg",
+      "medida": "50×60",
+      "tecnica": "Impresión a 12 tintas sobre lienzo",
+      "opciones": [
+        {
+          "nombre": "Lienzo",
+          "precio_usd": 80
+        },
+        {
+          "nombre": "Lienzo enmarcado en madera",
+          "precio_usd": 100
+        }
+      ]
+    },
+    {
+      "titulo": "Cima",
+      "tipo": "lienzo",
+      "foto": "/img/p-cima.jpg",
+      "medida": "50×60",
+      "tecnica": "Impresión a 12 tintas sobre lienzo",
+      "opciones": [
+        {
+          "nombre": "Lienzo",
+          "precio_usd": 80
+        },
+        {
+          "nombre": "Lienzo enmarcado en madera",
+          "precio_usd": 100
+        }
+      ],
+      "escala": 1.35
+    },
+    {
+      "titulo": "Al Ángulo",
+      "tipo": "lienzo",
+      "foto": "/img/p-alangulo.jpg",
+      "medida": "70×50",
+      "tecnica": "Impresión a 12 tintas sobre lienzo",
+      "opciones": [
+        {
+          "nombre": "Lienzo",
+          "precio_usd": 100
+        },
+        {
+          "nombre": "Lienzo enmarcado en madera",
+          "precio_usd": 200
+        }
+      ]
+    },
+    {
+      "titulo": "Flores Van Gogh",
+      "tipo": "lienzo",
+      "foto": "/img/p-flores.jpg",
+      "medida": "70×50",
+      "tecnica": "Impresión a 12 tintas sobre lienzo",
+      "opciones": [
+        {
+          "nombre": "Lienzo",
+          "precio_usd": 100
+        },
+        {
+          "nombre": "Lienzo enmarcado en madera",
+          "precio_usd": 200
+        }
+      ]
+    },
+    {
+      "titulo": "Polo",
+      "tipo": "lienzo",
+      "foto": "/img/p-polo.jpg",
+      "medida": "70×50",
+      "tecnica": "Impresión a 12 tintas sobre lienzo",
+      "opciones": [
+        {
+          "nombre": "Lienzo",
+          "precio_usd": 100
+        },
+        {
+          "nombre": "Lienzo enmarcado en madera",
+          "precio_usd": 200
+        }
+      ]
+    },
+    {
+      "titulo": "Pulso",
+      "tipo": "lienzo",
+      "foto": "/img/p-pulso.jpg",
+      "medida": "70×50",
+      "tecnica": "Impresión a 12 tintas sobre lienzo",
+      "opciones": [
+        {
+          "nombre": "Lienzo",
+          "precio_usd": 100
+        },
+        {
+          "nombre": "Lienzo enmarcado en madera",
+          "precio_usd": 200
+        }
+      ]
+    },
+    {
+      "titulo": "Lux",
+      "tipo": "lienzo",
+      "foto": "/img/p-lux.jpg",
+      "medida": "70×50",
+      "tecnica": "Impresión a 12 tintas sobre lienzo",
+      "opciones": [
+        {
+          "nombre": "Lienzo",
+          "precio_usd": 100
+        },
+        {
+          "nombre": "Lienzo enmarcado en madera",
+          "precio_usd": 200
+        }
+      ]
+    },
+    {
+      "titulo": "Tinta",
+      "tipo": "lienzo",
+      "foto": "/img/p-tinta.jpg",
+      "medida": "70×50",
+      "tecnica": "Impresión a 12 tintas sobre lienzo",
+      "opciones": [
+        {
+          "nombre": "Lienzo",
+          "precio_usd": 100
+        },
+        {
+          "nombre": "Lienzo enmarcado en madera",
+          "precio_usd": 200
+        }
+      ]
+    },
+    {
+      "titulo": "Atómica",
+      "tipo": "serigrafia",
+      "foto": "/img/f-atomica.jpg",
+      "medida": "60×72",
+      "tecnica": "Serigrafía numerada sobre papel fine art 200 g",
+      "opciones": [
+        {
+          "nombre": "Sin marco",
+          "precio_usd": 150
+        },
+        {
+          "nombre": "Con marco y vidrio",
+          "precio_usd": 150,
+          "extra_ars": 120000
+        }
+      ],
+      "foto_con_marco": "/img/ff-atomica.jpg"
+    },
+    {
+      "titulo": "Tanque",
+      "tipo": "serigrafia",
+      "foto": "/img/f-tanque.jpg",
+      "medida": "60×72",
+      "tecnica": "Serigrafía numerada sobre papel fine art 200 g",
+      "opciones": [
+        {
+          "nombre": "Sin marco",
+          "precio_usd": 150
+        },
+        {
+          "nombre": "Con marco y vidrio",
+          "precio_usd": 150,
+          "extra_ars": 120000
+        }
+      ],
+      "foto_con_marco": "/img/ff-tanque.jpg"
+    },
+    {
+      "titulo": "Válvula",
+      "tipo": "serigrafia",
+      "foto": "/img/f-valvula.jpg",
+      "medida": "60×72",
+      "tecnica": "Serigrafía numerada sobre papel fine art 200 g",
+      "opciones": [
+        {
+          "nombre": "Sin marco",
+          "precio_usd": 150
+        },
+        {
+          "nombre": "Con marco y vidrio",
+          "precio_usd": 150,
+          "extra_ars": 120000
+        }
+      ],
+      "foto_con_marco": "/img/ff-valvula.jpg"
+    },
+    {
+      "titulo": "Anfibio",
+      "tipo": "lienzo",
+      "foto": "/img/p-anfibio.jpg",
+      "medida": "100×75",
+      "tecnica": "Impresión a 12 tintas sobre lienzo",
+      "opciones": [
+        {
+          "nombre": "Lienzo",
+          "precio_usd": 250
+        },
+        {
+          "nombre": "Lienzo enmarcado",
+          "precio_usd": 350
+        }
+      ]
+    },
+    {
+      "titulo": "Branding",
+      "tipo": "lienzo",
+      "foto": "/img/p-branding.jpg",
+      "medida": "100×75",
+      "tecnica": "Impresión a 12 tintas sobre lienzo",
+      "opciones": [
+        {
+          "nombre": "Lienzo",
+          "precio_usd": 250
+        },
+        {
+          "nombre": "Lienzo enmarcado",
+          "precio_usd": 350
+        }
+      ]
+    },
+    {
+      "titulo": "Temperaturas",
+      "tipo": "lienzo",
+      "foto": "/img/f-temperaturas.jpg",
+      "medida": "100×75",
+      "tecnica": "Impresión a 12 tintas sobre lienzo",
+      "opciones": [
+        {
+          "nombre": "Lienzo",
+          "precio_usd": 250
+        },
+        {
+          "nombre": "Lienzo enmarcado",
+          "precio_usd": 450
+        }
+      ]
+    }
+  ]
+}

@@ -140,6 +140,23 @@ main{max-width:1320px;margin:0 auto;padding:24px max(3vw,16px) 80px}
   .acts{width:100%}
   .opt,.optsh{grid-template-columns:1fr 80px 90px 30px}
 }
+.ed{position:fixed;inset:0;z-index:35;background:#141414;color:#fff;display:flex;flex-direction:column}
+.edtop{padding:14px 20px 8px;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.edtop h3{font-size:26px}
+.edtop p{margin:0;color:#c9c5bf;font-size:14px}
+.edtop b{color:#fff}
+.edstage{flex:1;position:relative;min-height:200px}
+.edstage canvas{position:absolute;inset:0;touch-action:none;cursor:crosshair}
+.edbar{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;padding:12px 20px 18px;border-top:1px solid #2a2927}
+.edgrp{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.edend{margin-left:auto}
+.ed .btn.ghost{background:transparent;color:#fff;border-color:#4a4845}
+.ed .btn.ghost:hover{border-color:var(--red);color:#fff}
+.ed .chk{color:#e8e5df}
+.edhint{font-size:13px;color:#9a968f}
+.edsl label{display:flex;align-items:center;gap:8px;font-size:13px;color:#c9c5bf}
+.edsl input[type=range]{width:110px;accent-color:var(--red)}
+@media(max-width:640px){.edend{margin-left:0;width:100%}.edend .btn{flex:1;justify-content:center}.edsl input[type=range]{width:90px}}
 </style>
 </head>
 <body>
@@ -325,7 +342,7 @@ const openDrawer = () => { $('#drawer').classList.add('on'); $('#scrim').classLi
 const closeDrawer = () => { $('#drawer').classList.remove('on'); $('#scrim').classList.remove('on'); cur = null; render(); };
 const field = (lb, inner, hint) => `<div class="f"><span class="lb">${lb}</span>${inner}${hint?`<div class="hint">${hint}</div>`:''}</div>`;
 const sizeParts = m => { const [a,b] = String(m||'').split(/[×x]/i); return [a||'', b||'']; };
-const dropHTML = (name, p, txt) => `<div class="drop" data-drop="${name}">${p ? `<img src="${esc(imgSrc(p))}" alt="">` : ''}<small>${p ? 'Tocá o arrastrá otra foto para reemplazarla' : txt}</small><input type="file" accept="image/*" data-file="${name}" aria-label="Elegir foto"></div>`;
+const dropHTML = (name, p, txt) => `<div class="drop" data-drop="${name}">${p ? `<img src="${esc(imgSrc(p))}" alt="">` : ''}<small>${p ? 'Tocá o arrastrá otra foto para reemplazarla' : txt}</small><input type="file" accept="image/*" data-file="${name}" aria-label="Elegir foto"></div>${p ? `<button class="link" data-reedit="${name}" style="margin-top:8px">Recortar / enderezar esta foto</button>` : ''}`;
 
 const drawDrawer = () => {
   const x = cur, o = curKind === 'o', [w,h] = sizeParts(x.medida);
@@ -360,7 +377,8 @@ const openItem = (kind, i) => { curKind = kind; cur = (kind==='o' ? data.origina
 const setPhoto = async (name, file) => {
   if(!file || !file.type.startsWith('image/')){ toast('Elegí un archivo de imagen (JPG o PNG).'); return; }
   try{
-    const blob = await shrink(file);
+    const blob = await editPhoto(file, cur.medida, curKind, name);
+    if(!blob) return; // canceló
     const path = `/${UPLOADS}/${slug(cur.titulo)}-${Date.now().toString(36)}.jpg`;
     blobs[path] = {blob, url: URL.createObjectURL(blob)};
     cur[name] = path; setDirty(true); drawDrawer();
@@ -381,6 +399,9 @@ document.addEventListener('click', async e => {
       setDirty(true); openItem('o', data.originales.indexOf(a)); toast(t.dataset.add==='o2' ? 'Par agregado al final. Completá la primera obra y después la segunda.' : 'Original agregado al final de la sala.'); }
     render();
   }
+  else if(t.dataset.reedit){ const p = cur[t.dataset.reedit]; if(!p) return;
+    try{ const src = blobs[p] ? blobs[p].blob : await (await fetch(imgSrc(p), {cache:'no-store'})).blob(); await setPhoto(t.dataset.reedit, new File([src], 'foto.jpg', {type: src.type || 'image/jpeg'})); }
+    catch(err){ toast('No se pudo abrir esa foto para editarla.'); } }
   else if(t.dataset.tipo){ cur.tipo = t.dataset.tipo; if(cur.tipo !== 'serigrafia') delete cur.foto_con_marco; setDirty(true); drawDrawer(); }
   else if(t.dataset.esc){ cur.escala = +t.dataset.esc; if(cur.escala === 1) delete cur.escala; setDirty(true); drawDrawer(); }
   else if(t.hasAttribute('data-opadd')){ (cur.opciones ||= []).push({nombre:'', precio_usd:0}); setDirty(true); drawDrawer(); }
@@ -418,6 +439,92 @@ $('#dBody').addEventListener('change', e => {
   d.classList.toggle('over', ev === 'dragover');
   if(ev === 'drop' && e.dataTransfer.files[0]) setPhoto(d.dataset.drop, e.dataTransfer.files[0]);
 }));
+
+// ---------- editor de fotos: recorte por 4 esquinas (corrige perspectiva), giro, proporción y luz ----------
+const loadImg = file => new Promise((ok, ko) => { const im = new Image(), u = URL.createObjectURL(file); im.onload = () => ok({im, u}); im.onerror = () => ko(new Error('Ese archivo no es una imagen válida')); im.src = u; });
+const solve = (A, b) => { const n = b.length; for(let i=0;i<n;i++){ let m=i; for(let r=i+1;r<n;r++) if(Math.abs(A[r][i])>Math.abs(A[m][i])) m=r; [A[i],A[m]]=[A[m],A[i]]; [b[i],b[m]]=[b[m],b[i]];
+  for(let r=i+1;r<n;r++){ const f=A[r][i]/A[i][i]; for(let c=i;c<n;c++) A[r][c]-=f*A[i][c]; b[r]-=f*b[i]; } }
+  const x=new Array(n); for(let i=n-1;i>=0;i--){ let v=b[i]; for(let c=i+1;c<n;c++) v-=A[i][c]*x[c]; x[i]=v/A[i][i]; } return x; };
+// homografía que lleva el rectángulo de salida (0..W, 0..H) a las 4 esquinas marcadas en la foto
+const homog = (W, H, q) => { const d = [[0,0],[W,0],[W,H],[0,H]], A = [], b = [];
+  for(let i=0;i<4;i++){ const [x,y]=d[i], [u,v]=q[i]; A.push([x,y,1,0,0,0,-u*x,-u*y]); b.push(u); A.push([0,0,0,x,y,1,-v*x,-v*y]); b.push(v); }
+  return solve(A, b); };
+const warp = (srcCv, q, W, H, bright, contrast) => {
+  const sw = srcCv.width, sh = srcCv.height, sd = srcCv.getContext('2d').getImageData(0,0,sw,sh).data;
+  const out = document.createElement('canvas'); out.width = W; out.height = H; const ox = out.getContext('2d'), od = ox.createImageData(W,H), o = od.data;
+  const [a,b,c,d,e,f,g,h] = homog(W, H, q), k = contrast, br = bright;
+  for(let y=0;y<H;y++){ for(let x=0;x<W;x++){
+    const z = g*x + h*y + 1, u = (a*x + b*y + c)/z, v = (d*x + e*y + f)/z;
+    const x0 = Math.max(0, Math.min(sw-2, u|0)), y0 = Math.max(0, Math.min(sh-2, v|0)), fx = Math.min(1,Math.max(0,u-x0)), fy = Math.min(1,Math.max(0,v-y0));
+    const i00 = (y0*sw+x0)*4, i10 = i00+4, i01 = i00+sw*4, i11 = i01+4, oi = (y*W+x)*4;
+    for(let ch=0; ch<3; ch++){
+      const val = (sd[i00+ch]*(1-fx)+sd[i10+ch]*fx)*(1-fy) + (sd[i01+ch]*(1-fx)+sd[i11+ch]*fx)*fy;
+      o[oi+ch] = (val - 128)*k + 128 + br;
+    }
+    o[oi+3] = 255;
+  } }
+  ox.putImageData(od, 0, 0); return out;
+};
+const editPhoto = (file, medida, kind, field) => new Promise(async (resolve) => {
+  let loaded; try{ loaded = await loadImg(file); }catch(e){ toast(e.message); resolve(null); return; }
+  // copia de trabajo (máx. 2600 px) para que todo vaya fluido
+  const M = 2600, sc = Math.min(1, M/Math.max(loaded.im.naturalWidth, loaded.im.naturalHeight));
+  let src = document.createElement('canvas'); src.width = Math.round(loaded.im.naturalWidth*sc); src.height = Math.round(loaded.im.naturalHeight*sc);
+  src.getContext('2d').drawImage(loaded.im, 0, 0, src.width, src.height); URL.revokeObjectURL(loaded.u);
+  const mm = /^(\d+)×(\d+)$/.exec(medida||''), mAspect = mm ? (+mm[1])/(+mm[2]) : 0;
+  const inset = () => { const w = src.width, h = src.height, p = .04; return [[w*p,h*p],[w*(1-p),h*p],[w*(1-p),h*(1-p)],[w*p,h*(1-p)]]; };
+  let q = inset(), lock = !!mAspect, bright = 0, contrast = 1, drag = -1, view = {s:1, ox:0, oy:0};
+  const tip = kind==='o' ? 'Llevá cada punto rojo a una esquina del <b>marco</b>. La foto se endereza sola.' : (field==='foto_con_marco' ? 'Llevá los puntos a las esquinas del <b>marco</b>.' : 'Llevá los puntos a las esquinas de la <b>imagen impresa</b> (sin marco).');
+  $('#modalRoot').innerHTML = `<div class="ed"><div class="edtop"><h3>Encuadrar foto</h3><p>${tip}</p></div>
+    <div class="edstage"><canvas id="edcv"></canvas></div>
+    <div class="edbar">
+      <div class="edgrp"><button class="btn ghost sm" data-ed="rotl">⟲ Girar</button><button class="btn ghost sm" data-ed="rotr">Girar ⟳</button><button class="btn ghost sm" data-ed="full">Foto completa</button><button class="btn ghost sm" data-ed="reset">Restablecer</button></div>
+      <div class="edgrp">${mAspect ? `<label class="chk"><input type="checkbox" id="edlock" ${lock?'checked':''}> Proporción de la medida (${mm[1]}×${mm[2]})</label>` : '<span class="edhint">Cargá la medida para ajustar la proporción exacta</span>'}</div>
+      <div class="edgrp edsl"><label>Luz <input type="range" id="edb" min="-60" max="60" value="0"></label><label>Contraste <input type="range" id="edc" min="70" max="140" value="100"></label></div>
+      <div class="edgrp edend"><button class="btn ghost" data-ed="cancel">Cancelar</button><button class="btn red" data-ed="ok">Usar esta foto</button></div>
+    </div></div>`;
+  const cv = $('#edcv'), cx = cv.getContext('2d'), stage = $('.edstage');
+  const fit = () => { const r = stage.getBoundingClientRect(), dpr = Math.min(2, devicePixelRatio||1);
+    cv.width = r.width*dpr; cv.height = r.height*dpr; cv.style.width = r.width+'px'; cv.style.height = r.height+'px';
+    const pad = 28*dpr; view.s = Math.min((cv.width-2*pad)/src.width, (cv.height-2*pad)/src.height); view.ox = (cv.width - src.width*view.s)/2; view.oy = (cv.height - src.height*view.s)/2; draw(); };
+  const P = ([x,y]) => [view.ox + x*view.s, view.oy + y*view.s];
+  const draw = () => { const dpr = Math.min(2, devicePixelRatio||1);
+    cx.clearRect(0,0,cv.width,cv.height); cx.filter = `brightness(${1+bright/255}) contrast(${contrast})`; cx.drawImage(src, view.ox, view.oy, src.width*view.s, src.height*view.s); cx.filter = 'none';
+    // oscurece lo que queda afuera
+    cx.save(); cx.beginPath(); cx.rect(0,0,cv.width,cv.height); q.map(P).forEach(([x,y],i)=> i?cx.lineTo(x,y):cx.moveTo(x,y)); cx.closePath(); cx.fillStyle='rgba(20,20,20,.55)'; cx.fill('evenodd'); cx.restore();
+    cx.lineWidth = 2*dpr; cx.strokeStyle = '#f0401b'; cx.beginPath(); q.map(P).forEach(([x,y],i)=> i?cx.lineTo(x,y):cx.moveTo(x,y)); cx.closePath(); cx.stroke();
+    q.map(P).forEach(([x,y],i)=>{ cx.beginPath(); cx.arc(x,y,(drag===i?13:10)*dpr,0,7); cx.fillStyle='#f0401b'; cx.fill(); cx.lineWidth=3*dpr; cx.strokeStyle='#fff'; cx.stroke(); });
+    if(drag>=0){ // lupa para clavar la esquina con precisión
+      const [x,y] = q[drag], R = 70*dpr, Z = 3, [px,py] = P(q[drag]); const lx = px < cv.width/2 ? cv.width - R - 16*dpr : R + 16*dpr, ly = R + 16*dpr;
+      cx.save(); cx.beginPath(); cx.arc(lx,ly,R,0,7); cx.clip(); cx.fillStyle='#fff'; cx.fillRect(lx-R,ly-R,2*R,2*R);
+      cx.drawImage(src, x - R/(view.s*Z)*1, y - R/(view.s*Z)*1, 2*R/(view.s*Z), 2*R/(view.s*Z), lx-R, ly-R, 2*R, 2*R);
+      cx.strokeStyle='#f0401b'; cx.lineWidth=1.5*dpr; cx.beginPath(); cx.moveTo(lx-12*dpr,ly); cx.lineTo(lx+12*dpr,ly); cx.moveTo(lx,ly-12*dpr); cx.lineTo(lx,ly+12*dpr); cx.stroke(); cx.restore();
+      cx.beginPath(); cx.arc(lx,ly,R,0,7); cx.lineWidth=3*dpr; cx.strokeStyle='#fff'; cx.stroke(); }
+  };
+  const toSrc = e => { const r = cv.getBoundingClientRect(), dpr = cv.width/r.width; return [((e.clientX-r.left)*dpr - view.ox)/view.s, ((e.clientY-r.top)*dpr - view.oy)/view.s]; };
+  cv.addEventListener('pointerdown', e => { const [x,y] = toSrc(e); let best=-1, bd=Infinity; q.forEach(([a,b],i)=>{ const d=Math.hypot(a-x,b-y)*view.s; if(d<bd){bd=d;best=i;} });
+    if(bd < 44*(cv.width/cv.getBoundingClientRect().width)){ drag = best; cv.setPointerCapture(e.pointerId); draw(); } });
+  cv.addEventListener('pointermove', e => { if(drag<0) return; const [x,y] = toSrc(e); q[drag] = [Math.max(0,Math.min(src.width,x)), Math.max(0,Math.min(src.height,y))]; draw(); });
+  const up = () => { if(drag>=0){ drag=-1; draw(); } }; cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
+  const rot = dir => { const n = document.createElement('canvas'); n.width = src.height; n.height = src.width; const x = n.getContext('2d');
+    x.translate(n.width/2, n.height/2); x.rotate(dir*Math.PI/2); x.drawImage(src, -src.width/2, -src.height/2); src = n; q = inset(); fit(); };
+  const ro = new ResizeObserver(fit); ro.observe(stage);
+  $('#edb').oninput = e => { bright = +e.target.value; draw(); }; $('#edc').oninput = e => { contrast = (+e.target.value)/100; draw(); };
+  if($('#edlock')) $('#edlock').onchange = e => { lock = e.target.checked; };
+  const close = v => { ro.disconnect(); $('#modalRoot').innerHTML = ''; resolve(v); };
+  $('.ed').addEventListener('click', e => { const b = e.target.closest('[data-ed]'); if(!b) return; const a = b.dataset.ed;
+    if(a==='rotl') rot(-1); else if(a==='rotr') rot(1); else if(a==='reset'){ q = inset(); bright=0; contrast=1; $('#edb').value=0; $('#edc').value=100; draw(); }
+    else if(a==='full'){ q = [[0,0],[src.width,0],[src.width,src.height],[0,src.height]]; draw(); }
+    else if(a==='cancel') close(null);
+    else if(a==='ok'){ b.disabled = true; b.textContent = 'Procesando…';
+      setTimeout(() => { const top = Math.hypot(q[1][0]-q[0][0], q[1][1]-q[0][1]), bot = Math.hypot(q[2][0]-q[3][0], q[2][1]-q[3][1]),
+        lef = Math.hypot(q[3][0]-q[0][0], q[3][1]-q[0][1]), rig = Math.hypot(q[2][0]-q[1][0], q[2][1]-q[1][1]);
+        const asp = lock && mAspect ? mAspect : ((top+bot)/2)/((lef+rig)/2), L = 1800;
+        const W = Math.round(asp>=1 ? L : L*asp), H = Math.round(asp>=1 ? L/asp : L);
+        const out = warp(src, q, W, H, bright, contrast);
+        out.toBlob(bl => close(bl), 'image/jpeg', .87); }, 30); }
+  });
+});
 
 // ---------- diálogo ----------
 const confirmBox = (title, text, okLabel, alertOnly) => new Promise(res => {

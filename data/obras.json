@@ -388,7 +388,8 @@
       "anio": "2026",
       "precio": 1280,
       "metal": false,
-      "par_con_siguiente": false
+      "par_con_siguiente": false,
+      "marco": true
     }
   ],
   "prints": [

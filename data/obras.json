@@ -191,22 +191,22 @@
       "par_con_siguiente": false
     },
     {
-      "titulo": "Trazos",
-      "foto": "/img/o-016-0.jpg",
-      "medida": "",
-      "tecnica": "Óleo y pastel al óleo",
-      "anio": "2026",
-      "precio": 1300,
-      "metal": false,
-      "par_con_siguiente": false
-    },
-    {
       "titulo": "Temperaturas",
       "foto": "/img/o-015-0.jpg",
       "medida": "150×150",
       "tecnica": "Óleo y pastel al óleo",
       "anio": "2026",
       "precio": 1900,
+      "metal": false,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Trazos",
+      "foto": "/img/o-016-0.jpg",
+      "medida": "",
+      "tecnica": "Óleo y pastel al óleo",
+      "anio": "2026",
+      "precio": 1300,
       "metal": false,
       "par_con_siguiente": false
     },

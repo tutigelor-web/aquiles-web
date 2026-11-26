@@ -161,6 +161,11 @@ main{max-width:1320px;margin:0 auto;padding:24px max(3vw,16px) 80px}
 @media(max-width:640px){.edend{margin-left:0;width:100%}.edend .btn{flex:1;justify-content:center}.edsl input[type=range]{width:90px}}
 .btn.ghost.delbtn{color:#b3261e;border-color:#f0c9c4}
 .btn.ghost.delbtn:hover{background:#b3261e;color:#fff;border-color:#b3261e}
+.cdel{position:absolute;top:6px;right:6px;width:30px;height:30px;border-radius:99px;background:rgba(255,255,255,.92);color:#b3261e;display:grid;place-items:center;font-size:18px;line-height:1;opacity:0;transition:opacity .2s;box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.card:hover .cdel,.cdel:focus{opacity:1}
+.cdel:hover{background:#b3261e;color:#fff}
+@media(hover:none){.cdel{opacity:1}}
+.dh .delbtn{margin-right:2px}
 </style>
 </head>
 <body>
@@ -204,7 +209,7 @@ main{max-width:1320px;margin:0 auto;padding:24px max(3vw,16px) 80px}
 
 <div class="scrim" id="scrim"></div>
 <aside class="drawer" id="drawer" aria-label="Editar obra">
-  <div class="dh"><h2 id="dTitle">Editar</h2><button class="x" data-close aria-label="Cerrar">×</button></div>
+  <div class="dh"><h2 id="dTitle">Editar</h2><button class="btn ghost sm delbtn" data-del>Eliminar</button><button class="x" data-close aria-label="Cerrar">×</button></div>
   <div class="db" id="dBody"></div>
   <div class="df" id="dFoot"></div>
 </aside>
@@ -288,7 +293,7 @@ const cardHTML = (x, kind, idx) => {
   const src = imgSrc(x.foto), isNew = x.foto && blobs[x.foto];
   const price = kind==='o' ? (+x.precio ? usd(x.precio) : 'Consultar precio') : (minPrint(x) ? 'desde ' + usd(minPrint(x)) : 'Sin precio');
   return `<button class="card" data-edit="${kind}:${idx}">
-    <div class="ph">${src ? `<img src="${esc(src)}" alt="" loading="lazy">` : '<span class="empty">Falta la foto</span>'}${isNew?'<span class="badge">Nueva</span>':''}</div>
+    <div class="ph">${src ? `<img src="${esc(src)}" alt="" loading="lazy">` : '<span class="empty">Falta la foto</span>'}${isNew?'<span class="badge">Nueva</span>':''}<span class="cdel" role="button" tabindex="0" data-cdel="${kind}:${idx}" title="Eliminar obra" aria-label="Eliminar obra">×</span></div>
     <div><div class="t">${esc(x.titulo||'Sin título')}</div><div class="m">${esc((x.medida||'—').replace(/x/i,'×'))} cm${kind==='p'?' · '+(x.tipo==='serigrafia'?'Serigrafía':'Lienzo'):''}</div><div class="p">${price}</div></div>
   </button>`;
 };
@@ -390,11 +395,19 @@ const setPhoto = async (name, file) => {
   }catch(e){ toast(e.message); }
 };
 
+const delCur = async () => {
+  const ok = await confirmBox('¿Eliminar esta obra?', `«${cur.titulo || 'Sin título'}» se va a quitar de la galería cuando publiques los cambios.`, 'Eliminar');
+  if(!ok){ if(!$('#drawer').classList.contains('on')) cur = null; return; }
+  const arr = curKind==='o' ? data.originales : data.prints, i = arr.indexOf(cur);
+  if(curKind==='o' && i>0 && !cur.par_con_siguiente && arr[i-1].par_con_siguiente) arr[i-1].par_con_siguiente = false;
+  arr.splice(i, 1); setDirty(true); closeDrawer(); toast('Obra eliminada. Tocá «Publicar cambios» para que se vea en la web.');
+};
 // ---------- eventos ----------
 document.addEventListener('click', async e => {
   const t = e.target.closest('button,[data-close]'); if(!t) return;
   if(t.id === 'loginBtn'){ $('#loginErr').textContent = ''; try{ token = await login(); saveToken(token); await start(); }catch(err){ $('#loginErr').textContent = err.message; } }
   else if(t.dataset.tab){ tab = t.dataset.tab; $('#q').value = ''; render(); }
+  else if(t.dataset.edit && e.target.closest('[data-cdel]')){ const [k,i] = e.target.closest('[data-cdel]').dataset.cdel.split(':'); curKind = k; cur = (k==='o'?data.originales:data.prints)[+i]; await delCur(); }
   else if(t.dataset.edit){ const [k,i] = t.dataset.edit.split(':'); openItem(k, +i); }
   else if(t.dataset.add){
     if(t.dataset.add === 'p'){ data.prints.push({titulo:'', tipo:'lienzo', foto:'', medida:'70×50', tecnica:'Impresión a 12 tintas sobre lienzo', opciones:[{nombre:'Lienzo', precio_usd:0},{nombre:'Lienzo enmarcado en madera', precio_usd:0}]}); setDirty(true); openItem('p', data.prints.length-1); }
@@ -412,13 +425,7 @@ document.addEventListener('click', async e => {
   else if(t.hasAttribute('data-opadd')){ (cur.opciones ||= []).push({nombre:'', precio_usd:0}); setDirty(true); drawDrawer(); }
   else if(t.dataset.opdel){ cur.opciones.splice(+t.dataset.opdel, 1); setDirty(true); drawDrawer(); }
   else if(t.dataset.mv){ const a = data.originales, i = a.indexOf(cur), j = i + (+t.dataset.mv); if(j<0 || j>=a.length) return; [a[i], a[j]] = [a[j], a[i]]; setDirty(true); drawDrawer(); render(); }
-  else if(t.hasAttribute('data-del')){
-    const ok = await confirmBox('¿Eliminar esta obra?', `«${cur.titulo || 'Sin título'}» se va a quitar de la galería cuando publiques los cambios.`, 'Eliminar');
-    if(!ok) return;
-    const arr = curKind==='o' ? data.originales : data.prints, i = arr.indexOf(cur);
-    if(curKind==='o' && i>0 && !cur.par_con_siguiente && arr[i-1].par_con_siguiente) arr[i-1].par_con_siguiente = false;
-    arr.splice(i, 1); setDirty(true); closeDrawer(); toast('Obra borrada. Publicá para que se vea en la web.');
-  }
+  else if(t.hasAttribute('data-del')) await delCur();
   else if(t.hasAttribute('data-close')) closeDrawer();
   else if(t.id === 'publish') publish();
   else if(t.id === 'logout'){ if(dirty && !(await confirmBox('Tenés cambios sin publicar', 'Si salís ahora se pierden.', 'Salir igual'))) return; try{ localStorage.removeItem('aq-admin-token'); localStorage.removeItem('decap-cms-user'); }catch(_){} dirty = false; location.reload(); }

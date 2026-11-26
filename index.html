@@ -256,7 +256,7 @@ const depthVars = it => { const framed = it.sel===1;
   return framed ? '--d:28px;--o:-7px;--side:linear-gradient(90deg,#8e6a3c,#ad8650)' : '--d:14px;--o:0px;--side:#ddd5c8'; };
 const imgOf = it => (it.g==='ser' && it.sel===1 && it.ff) ? it.ff : it.f;
 const dims = it => {
-  const [a,b] = (/\d+×\d+/.test(it.size||'') ? it.size : '130×100').split('×').map(Number); // sin medida: tamaño típico de la sala const L = (it.kind==='p' ? 0.9 + (Math.max(a,b)/100-0.5)*1.25 : Math.max(a,b)/100) * (it.scale||1), r = AR[imgOf(it)]||AR[it.f]||1;
+  const [a,b] = (/\d+×\d+/.test(it.size||'') ? it.size : '130×100').split('×').map(Number); /* sin medida: tamaño típico de la sala */ const L = (it.kind==='p' ? 0.9 + (Math.max(a,b)/100-0.5)*1.25 : Math.max(a,b)/100) * (it.scale||1), r = AR[imgOf(it)]||AR[it.f]||1;
   return r>=1 ? [L, L/r] : [L*r, L];
 };
 const place = (el, x, y, z, ry, rx) => { el.style.transform = `translate3d(${x*U}px,${-y*U}px,${z*U}px) rotateY(${ry}rad)` + (rx?` rotateX(${rx}rad)`:''); };

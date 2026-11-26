@@ -181,22 +181,22 @@
       "par_con_siguiente": false
     },
     {
-      "titulo": "Temperaturas",
-      "foto": "/img/o-015-0.jpg",
-      "medida": "150×150",
-      "tecnica": "Óleo y pastel al óleo",
-      "anio": "2026",
-      "precio": 1900,
-      "metal": false,
-      "par_con_siguiente": false
-    },
-    {
       "titulo": "Cordel",
       "foto": "/img/o-014-0.jpg",
       "medida": "160×100",
       "tecnica": "Óleo y pastel al óleo",
       "anio": "2026",
       "precio": 1500,
+      "metal": false,
+      "par_con_siguiente": false
+    },
+    {
+      "titulo": "Temperaturas",
+      "foto": "/img/o-015-0.jpg",
+      "medida": "150×150",
+      "tecnica": "Óleo y pastel al óleo",
+      "anio": "2026",
+      "precio": 1900,
       "metal": false,
       "par_con_siguiente": false
     },

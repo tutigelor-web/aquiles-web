@@ -379,6 +379,16 @@
       "precio": 1500,
       "metal": false,
       "par_con_siguiente": false
+    },
+    {
+      "titulo": "Pito pito",
+      "foto": "/img/obras/obra-mwxkyvmu.jpg",
+      "medida": "130×100",
+      "tecnica": "Óleo y pastel al óleo",
+      "anio": "2026",
+      "precio": 1280,
+      "metal": false,
+      "par_con_siguiente": false
     }
   ],
   "prints": [

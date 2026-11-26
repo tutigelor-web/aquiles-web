@@ -176,6 +176,11 @@ body.loading .top,body.loading .cap,body.loading .prog{opacity:0;pointer-events:
 .itabs button{border:0;background:none;padding:6px 0;font-family:"Big Shoulders Display",Impact,sans-serif;font-weight:800;font-size:32px;line-height:1;text-transform:uppercase;color:#c9c5bf;flex:none;transition:color .2s;min-height:44px}
 .itabs button:hover{color:var(--red)}
 .itabs button[aria-selected=true]{color:var(--ink)}
+/* marco de madera que agrega la web a los originales cargados sin marco (como los de las fotos del catálogo) */
+.art.ofr{border:8px solid #6e4f33;border-image:linear-gradient(160deg,#8a6644,#5e4329 60%,#6f5034) 1;padding:5px;background:#d9cfc1;box-shadow:inset 0 0 10px rgba(50,35,20,.3),0 0 0 1px #4a3420,0 54px 90px -36px rgba(0,0,0,.4),0 6px 12px rgba(0,0,0,.15)}
+.art.ofr img{box-shadow:0 1px 5px rgba(40,30,20,.25)}
+.pv.ofr{border:5px solid #6e4f33;border-image:linear-gradient(160deg,#8a6644,#5e4329 60%,#6f5034) 1;padding:3px;background:#d9cfc1;box-shadow:inset 0 0 6px rgba(50,35,20,.3),0 0 0 1px #4a3420,0 12px 24px -10px rgba(40,30,20,.4)}
+.panel .im .pv.ofr img{object-fit:cover}
 </style>
 </head>
 <body class="loading">
@@ -214,7 +219,7 @@ const loadData = () => fetch('data/obras.json?v='+Date.now(), {cache:'no-store'}
   const og = d.originales||[];
   og.forEach((x,i)=>{ const pn = !!x.par_con_siguiente && i < og.length-1, pp = i>0 && !!og[i-1].par_con_siguiente;
     O.push({id:'o'+(i+1), kind:'o', title:x.titulo||'Sin título', f:rel(x.foto), size:String(x.medida||'').replace(/x/i,'×'), tech:x.tecnica||'', year:String(x.anio||''),
-      pairNext:pn, pair:pn||pp, opts:[{l:x.metal?'Original sobre lienzo (también sobre metal, a consultar)':'Original enmarcado', usd:+x.precio||0}]}); });
+      pairNext:pn, pair:pn||pp, marco:!!x.marco, opts:[{l:x.metal?'Original sobre lienzo (también sobre metal, a consultar)':'Original enmarcado', usd:+x.precio||0}]}); });
   (d.prints||[]).forEach((x,i)=>{ const opts = (x.opciones||[]).map(o=>({l:o.nombre||'Opción', usd:+o.precio_usd||0, ars:+o.extra_ars||0}));
     if(!opts.length) opts.push({l:'Print', usd:0});
     P.push({id:'p'+(i+1), kind:'p', title:x.titulo||'Sin título', f:rel(x.foto), ff:rel(x.foto_con_marco), size:String(x.medida||'50×50').replace(/x/i,'×'), tech:x.tecnica||'',
@@ -252,6 +257,7 @@ let ahead = calcAhead();
 
 // profundidad del marco (3,5 cm) y color del canto según formato
 const depthVars = it => { const framed = it.sel===1;
+  if(it.kind==='o') return '--d:24px;--o:-11px;--side:linear-gradient(90deg,#5b4029,#7b5a3b)'; // original con marco agregado por la web
   if(it.g==='ser') return framed ? `--d:14px;--o:0px;--side:linear-gradient(90deg,#c9c5bf,#dedad4)` : '--d:4px;--o:0px;--side:#e8e3da';
   return framed ? '--d:28px;--o:-7px;--side:linear-gradient(90deg,#8e6a3c,#ad8650)' : '--d:14px;--o:0px;--side:#ddd5c8'; };
 const imgOf = it => (it.g==='ser' && it.sel===1 && it.ff) ? it.ff : it.f;
@@ -277,12 +283,12 @@ const build = kind => {
   slots.forEach(({it,w,h,s},i) => {
     const th = s/R, el = document.createElement('div');
     el.className = 'slot'; el.dataset.i = i;
-    const fr = it.kind==='p' ? ` ${it.g}${it.sel===1?' fr':''} p3d` : '';
+    const fr = it.kind==='p' ? ` ${it.g}${it.sel===1?' fr':''} p3d` : (it.marco ? ' ofr p3d' : '');
     const showLab = false; // sin etiqueta en la pared: la info va solo en el pie de pantalla
     const lab = showLab ? (it.pair && it.kind==='o'
       ? `<div class="lab" style="margin-top:${Math.max(0,h*U-120)}px"><b>${esc(items[i-1].title)} y ${esc(it.title.replace('Original ',''))}</b>${esc(it.tech)}, ${esc(it.year)}<br>${sizeTxt(it.size)} c/u<span class="p">${optP(it.opts[0])} c/u</span></div>`
       : `<div class="lab" style="margin-top:${Math.max(0,h*U-120)}px"><b>${esc(it.title)}</b>${esc(it.tech)}${it.year?', '+esc(it.year):''}<br>${sizeTxt(it.size)}<span class="p">${it.kind==='p'?'desde '+usd(minP(it)):optP(it.opts[0])}</span></div>`) : '';
-    el.innerHTML = `<div class="art${fr}" style="width:${w*U}px;height:${h*U}px;${it.kind==='p'?depthVars(it):''}"><img src="${imgOf(it)}" alt="${esc(it.title)}" draggable="false" decoding="sync"></div>${lab}`;
+    el.innerHTML = `<div class="art${fr}" style="width:${w*U}px;height:${h*U}px;${(it.kind==='p'||it.marco)?depthVars(it):''}"><img src="${imgOf(it)}" alt="${esc(it.title)}" draggable="false" decoding="sync"></div>${lab}`;
     el.style.marginLeft = (-(w*U)/2) + 'px'; el.style.marginTop = (-(h*U)/2) + 'px'; el.style.transformOrigin = `${w*U/2}px ${h*U/2}px`;
     world.appendChild(el);
     place(el, (R-0.02)*Math.cos(th), HANG, (R-0.02)*Math.sin(th), facing(th));
@@ -375,7 +381,7 @@ const drawItem = () => { requestAnimationFrame(()=>{ panel.scrollTop = 0; });
   const it = cur, o = it.opts[it.kind==='p'?it.sel:0];
   const opts = it.kind==='p' ? it.opts.map((x,j)=>`<button class="opt" data-o="${j}" aria-pressed="${j===it.sel}"><span>${esc(x.l)}</span><strong>${optP(x)}</strong></button>`).join('') : `<p class="note">${esc(o.l)}</p>`;
   const other = room==='o' ? ['p','Recorré también la sala de prints.','Ir a Prints'] : ['o','Conocé las piezas únicas.','Ir a Originales'];
-  panel.innerHTML = `<div class="im">${it.kind==='p' ? `<div class="pv ${it.g}${it.sel===1?' fr':''}" style="aspect-ratio:${AR[imgOf(it)]||1};width:min(100%, calc(32vh * ${AR[imgOf(it)]||1}))"><img src="${imgOf(it)}" alt="${esc(it.title)}"></div>` : `<img src="${imgOf(it)}" alt="${esc(it.title)}">`}</div><div class="pin"><button class="x" data-close aria-label="Cerrar" style="margin:-8px -10px -14px 0">×</button>
+  panel.innerHTML = `<div class="im">${(it.kind==='p'||it.marco) ? `<div class="pv ${it.kind==='p' ? it.g+(it.sel===1?' fr':'') : 'ofr'}" style="aspect-ratio:${AR[imgOf(it)]||1};width:min(100%, calc(32vh * ${AR[imgOf(it)]||1}))"><img src="${imgOf(it)}" alt="${esc(it.title)}"></div>` : `<img src="${imgOf(it)}" alt="${esc(it.title)}">`}</div><div class="pin"><button class="x" data-close aria-label="Cerrar" style="margin:-8px -10px -14px 0">×</button>
     <h2>${esc(it.title)}</h2><dl class="spec"><dt>Medida</dt><dd>${sizeTxt(it.size)}</dd><dt>Técnica</dt><dd>${esc(it.tech)}</dd>${it.year?`<dt>Año</dt><dd>${esc(it.year)}</dd>`:''}</dl>
     <div>${opts}</div><div class="price">${optP(o)}</div>
     <p class="note">${it.kind==='o'?'Llega con certificado, embastido y con marco flotante de madera, listo para colgar.':'Se produce a pedido y llega en 10 a 12 días. Se puede adaptar la medida.'}</p>

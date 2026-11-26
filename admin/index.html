@@ -31,7 +31,9 @@ h1,h2,h3{font-family:"Big Shoulders Display",Impact,sans-serif;font-weight:800;t
 .btn.ghost:hover{border-color:var(--red);color:var(--red);background:#fff}
 .btn.red{background:var(--red);border-color:var(--red)}
 .btn.red:hover{background:#d4330f;border-color:#d4330f}
-.btn:disabled{opacity:.35;cursor:default;background:var(--ink);border-color:var(--ink)}
+.btn:disabled{opacity:.35;cursor:default}
+.btn:not(.ghost):disabled{background:var(--ink);border-color:var(--ink)}
+.btn.ghost:disabled:hover{color:var(--ink);border-color:var(--line)}
 .btn.sm{padding:7px 14px;min-height:36px;font-size:14px}
 .err{color:#b3261e;font-size:14px;margin-top:14px}
 
@@ -157,6 +159,8 @@ main{max-width:1320px;margin:0 auto;padding:24px max(3vw,16px) 80px}
 .edsl label{display:flex;align-items:center;gap:8px;font-size:13px;color:#c9c5bf}
 .edsl input[type=range]{width:110px;accent-color:var(--red)}
 @media(max-width:640px){.edend{margin-left:0;width:100%}.edend .btn{flex:1;justify-content:center}.edsl input[type=range]{width:90px}}
+.btn.ghost.delbtn{color:#b3261e;border-color:#f0c9c4}
+.btn.ghost.delbtn:hover{background:#b3261e;color:#fff;border-color:#b3261e}
 </style>
 </head>
 <body>
@@ -348,7 +352,7 @@ const drawDrawer = () => {
   const x = cur, o = curKind === 'o', [w,h] = sizeParts(x.medida);
   const idx = o ? data.originales.indexOf(x) : data.prints.indexOf(x);
   $('#dTitle').textContent = x.titulo || (o ? 'Nuevo original' : 'Nuevo print');
-  let b = field('Foto', dropHTML('foto', x.foto, o ? 'Arrastrá la foto de la obra o tocá para elegirla<br>Ideal: la obra con su marco, recortada justo al borde' : (x.tipo==='serigrafia' ? 'Foto del papel solo, sin marco' : 'Imagen del print sin marco (el marco de madera lo pone la web)')));
+  let b = field('Foto', dropHTML('foto', x.foto, o ? 'Arrastrá la foto de la obra o tocá para elegirla' : (x.tipo==='serigrafia' ? 'Foto del papel solo, sin marco' : 'Imagen del print sin marco (el marco de madera lo pone la web)')));
   if(!o){
     b += field('Tipo', `<div class="seg"><button data-tipo="lienzo" aria-pressed="${x.tipo!=='serigrafia'}">Lienzo</button><button data-tipo="serigrafia" aria-pressed="${x.tipo==='serigrafia'}">Serigrafía</button></div>`);
     if(x.tipo==='serigrafia') b += field('Foto con marco', dropHTML('foto_con_marco', x.foto_con_marco, 'Foto de la serigrafía con su marco de color (opcional)'));
@@ -358,9 +362,10 @@ const drawDrawer = () => {
   b += field('Técnica', `<input class="in" data-k="tecnica" value="${esc(x.tecnica)}" placeholder="${o?'Óleo y pastel al óleo':'Impresión a 12 tintas sobre lienzo'}">`);
   if(o){
     b += `<div class="two">${field('Año', `<input class="in" data-k="anio" value="${esc(x.anio)}" inputmode="numeric">`)}${field('Precio (USD)', `<input class="in" data-k="precio" data-num value="${+x.precio||''}" inputmode="numeric" placeholder="0">`, '0 o vacío = «Consultar precio»')}</div>`;
+    b += `<label class="chk"><input type="checkbox" data-bool="marco" ${x.marco?'checked':''}> <span>Agregarle el marco de madera en la web<small style="display:block;color:var(--soft);margin-top:2px">Activalo si la foto es solo la obra, sin marco. Desactivalo si la foto ya muestra el marco.</small></span></label>`;
     b += `<label class="chk"><input type="checkbox" data-bool="metal" ${x.metal?'checked':''}> También se puede pedir sobre metal</label>`;
     const prevPair = idx>0 && data.originales[idx-1].par_con_siguiente;
-    b += `<label class="chk"><input type="checkbox" data-bool="par_con_siguiente" ${x.par_con_siguiente?'checked':''} ${idx===data.originales.length-1?'disabled':''}> Forma par con la obra siguiente${prevPair?'<br><small style="color:var(--soft)">Esta obra ya es la segunda de un par.</small>':''}</label>`;
+    b += `<label class="chk"><input type="checkbox" data-bool="par_con_siguiente" ${x.par_con_siguiente?'checked':''} ${idx===data.originales.length-1?'disabled':''}> <span>Forma par con la obra siguiente${prevPair?'<small style="display:block;color:var(--soft);margin-top:2px">Esta obra ya es la segunda de un par.</small>':''}</span></label>`;
     b += `<div class="move">Posición ${idx+1} de ${data.originales.length} <button class="btn ghost sm" data-mv="-1" ${idx===0?'disabled':''}>← Antes</button><button class="btn ghost sm" data-mv="1" ${idx===data.originales.length-1?'disabled':''}>Después →</button></div>`;
   } else {
     const ops = x.opciones ||= [];
@@ -369,7 +374,7 @@ const drawDrawer = () => {
     b += field('Tamaño en la pared', `<div class="seg">${[[1,'Normal'],[1.2,'Más grande'],[1.35,'Mucho más']].map(([v,l])=>`<button data-esc="${v}" aria-pressed="${(+x.escala||1)===v}">${l}</button>`).join('')}</div>`, 'Útil si una obra apaisada queda chica en la sala.');
   }
   $('#dBody').innerHTML = b;
-  $('#dFoot').innerHTML = `<button class="btn" data-close>Listo</button><span style="flex:1"></span><button class="link danger" data-del>Borrar obra</button>`;
+  $('#dFoot').innerHTML = `<button class="btn" data-close>Listo</button><span style="flex:1"></span><button class="btn ghost delbtn" data-del>Eliminar obra</button>`;
 };
 
 const openItem = (kind, i) => { curKind = kind; cur = (kind==='o' ? data.originales : data.prints)[i]; drawDrawer(); openDrawer(); $('#drawer .db').scrollTop = 0; };
@@ -393,7 +398,7 @@ document.addEventListener('click', async e => {
   else if(t.dataset.edit){ const [k,i] = t.dataset.edit.split(':'); openItem(k, +i); }
   else if(t.dataset.add){
     if(t.dataset.add === 'p'){ data.prints.push({titulo:'', tipo:'lienzo', foto:'', medida:'70×50', tecnica:'Impresión a 12 tintas sobre lienzo', opciones:[{nombre:'Lienzo', precio_usd:0},{nombre:'Lienzo enmarcado en madera', precio_usd:0}]}); setDirty(true); openItem('p', data.prints.length-1); }
-    else { const base = () => ({titulo:'', foto:'', medida:'130×100', tecnica:'Óleo y pastel al óleo', anio:String(new Date().getFullYear()), precio:0, metal:false, par_con_siguiente:false});
+    else { const base = () => ({titulo:'', foto:'', medida:'130×100', tecnica:'Óleo y pastel al óleo', anio:String(new Date().getFullYear()), precio:0, metal:false, par_con_siguiente:false, marco:true});
       const a = base(); if(t.dataset.add === 'o2') a.par_con_siguiente = true;
       data.originales.push(a); if(t.dataset.add === 'o2') data.originales.push(base());
       setDirty(true); openItem('o', data.originales.indexOf(a)); toast(t.dataset.add==='o2' ? 'Par agregado al final. Completá la primera obra y después la segunda.' : 'Original agregado al final de la sala.'); }
@@ -408,7 +413,7 @@ document.addEventListener('click', async e => {
   else if(t.dataset.opdel){ cur.opciones.splice(+t.dataset.opdel, 1); setDirty(true); drawDrawer(); }
   else if(t.dataset.mv){ const a = data.originales, i = a.indexOf(cur), j = i + (+t.dataset.mv); if(j<0 || j>=a.length) return; [a[i], a[j]] = [a[j], a[i]]; setDirty(true); drawDrawer(); render(); }
   else if(t.hasAttribute('data-del')){
-    const ok = await confirmBox('¿Borrar esta obra?', `«${cur.titulo || 'Sin título'}» se va a quitar de la galería cuando publiques los cambios.`, 'Borrar');
+    const ok = await confirmBox('¿Eliminar esta obra?', `«${cur.titulo || 'Sin título'}» se va a quitar de la galería cuando publiques los cambios.`, 'Eliminar');
     if(!ok) return;
     const arr = curKind==='o' ? data.originales : data.prints, i = arr.indexOf(cur);
     if(curKind==='o' && i>0 && !cur.par_con_siguiente && arr[i-1].par_con_siguiente) arr[i-1].par_con_siguiente = false;
@@ -474,7 +479,7 @@ const editPhoto = (file, medida, kind, field) => new Promise(async (resolve) => 
   const mm = /^(\d+)×(\d+)$/.exec(medida||''), mAspect = mm ? (+mm[1])/(+mm[2]) : 0;
   const inset = () => { const w = src.width, h = src.height, p = .04; return [[w*p,h*p],[w*(1-p),h*p],[w*(1-p),h*(1-p)],[w*p,h*(1-p)]]; };
   let q = inset(), lock = !!mAspect, bright = 0, contrast = 1, drag = -1, view = {s:1, ox:0, oy:0};
-  const tip = kind==='o' ? 'Llevá cada punto rojo a una esquina del <b>marco</b>. La foto se endereza sola.' : (field==='foto_con_marco' ? 'Llevá los puntos a las esquinas del <b>marco</b>.' : 'Llevá los puntos a las esquinas de la <b>imagen impresa</b> (sin marco).');
+  const tip = kind==='o' ? (cur && cur.marco ? 'Llevá cada punto rojo a una esquina de la <b>obra</b> (sin el marco). La foto se endereza sola.' : 'Llevá cada punto rojo a una esquina del <b>marco</b>. La foto se endereza sola.') : (field==='foto_con_marco' ? 'Llevá los puntos a las esquinas del <b>marco</b>.' : 'Llevá los puntos a las esquinas de la <b>imagen impresa</b> (sin marco).');
   $('#modalRoot').innerHTML = `<div class="ed"><div class="edtop"><h3>Encuadrar foto</h3><p>${tip}</p></div>
     <div class="edstage"><canvas id="edcv"></canvas></div>
     <div class="edbar">

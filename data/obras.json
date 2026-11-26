@@ -379,17 +379,6 @@
       "precio": 1500,
       "metal": false,
       "par_con_siguiente": false
-    },
-    {
-      "titulo": "Pito pito",
-      "foto": "/img/obras/obra-mwxkyvmu.jpg",
-      "medida": "130×100",
-      "tecnica": "Óleo y pastel al óleo",
-      "anio": "2026",
-      "precio": 1280,
-      "metal": false,
-      "par_con_siguiente": false,
-      "marco": true
     }
   ],
   "prints": [
@@ -671,24 +660,6 @@
           "precio_usd": 450
         }
       ]
-    },
-    {
-      "titulo": "Pito pito",
-      "tipo": "lienzo",
-      "foto": "/img/obras/obra-mwxlineg.jpg",
-      "medida": "70×50",
-      "tecnica": "Impresión a 12 tintas sobre lienzo",
-      "opciones": [
-        {
-          "nombre": "Lienzo",
-          "precio_usd": 100
-        },
-        {
-          "nombre": "Lienzo enmarcado en madera",
-          "precio_usd": 200
-        }
-      ],
-      "escala": 1.2
     }
   ]
 }

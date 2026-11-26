@@ -687,7 +687,8 @@
           "nombre": "Lienzo enmarcado en madera",
           "precio_usd": 200
         }
-      ]
+      ],
+      "escala": 1.2
     }
   ]
 }

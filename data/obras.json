@@ -671,6 +671,23 @@
           "precio_usd": 450
         }
       ]
+    },
+    {
+      "titulo": "Pito pito",
+      "tipo": "lienzo",
+      "foto": "/img/obras/obra-mwxlineg.jpg",
+      "medida": "70×50",
+      "tecnica": "Impresión a 12 tintas sobre lienzo",
+      "opciones": [
+        {
+          "nombre": "Lienzo",
+          "precio_usd": 100
+        },
+        {
+          "nombre": "Lienzo enmarcado en madera",
+          "precio_usd": 200
+        }
+      ]
     }
   ]
 }

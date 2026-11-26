@@ -209,7 +209,7 @@ const AR = {"img/ff-atomica.jpg":0.744,"img/ff-tanque.jpg":0.743,"img/ff-valvula
 const O = [], P = [], ROOMS = {o:O, p:P};
 const rel = p => String(p||'').trim().replace(/^\/+/, '');
 const sz = it => { const [a,b]=String(it.size||'50×50').split(/[×x]/i).map(Number); return Math.max(a||50,b||50)*1000+(a||50)*(b||50)/100; };
-const loadData = () => fetch('data/obras.json', {cache:'no-cache'}).then(r=>r.json()).then(d=>{
+const loadData = () => fetch('data/obras.json?v='+Date.now(), {cache:'no-store'}) /* siempre la versión más nueva de las obras */.then(r=>r.json()).then(d=>{
   O.length = 0; P.length = 0;
   const og = d.originales||[];
   og.forEach((x,i)=>{ const pn = !!x.par_con_siguiente && i < og.length-1, pp = i>0 && !!og[i-1].par_con_siguiente;
@@ -256,7 +256,7 @@ const depthVars = it => { const framed = it.sel===1;
   return framed ? '--d:28px;--o:-7px;--side:linear-gradient(90deg,#8e6a3c,#ad8650)' : '--d:14px;--o:0px;--side:#ddd5c8'; };
 const imgOf = it => (it.g==='ser' && it.sel===1 && it.ff) ? it.ff : it.f;
 const dims = it => {
-  const [a,b] = (it.size||'100×100').split('×').map(Number); const L = (it.kind==='p' ? 0.9 + (Math.max(a,b)/100-0.5)*1.25 : Math.max(a,b)/100) * (it.scale||1), r = AR[imgOf(it)]||AR[it.f]||1;
+  const [a,b] = (/\d+×\d+/.test(it.size||'') ? it.size : '130×100').split('×').map(Number); // sin medida: tamaño típico de la sala const L = (it.kind==='p' ? 0.9 + (Math.max(a,b)/100-0.5)*1.25 : Math.max(a,b)/100) * (it.scale||1), r = AR[imgOf(it)]||AR[it.f]||1;
   return r>=1 ? [L, L/r] : [L*r, L];
 };
 const place = (el, x, y, z, ry, rx) => { el.style.transform = `translate3d(${x*U}px,${-y*U}px,${z*U}px) rotateY(${ry}rad)` + (rx?` rotateX(${rx}rad)`:''); };
